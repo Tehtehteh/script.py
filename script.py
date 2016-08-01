@@ -48,7 +48,8 @@ def get_filepaths(directory):
 
 #--------------------- CREATE FILE HASH, ARGUMENT IS ABSOLUTE PATH TO FILE -------------------------#
 
-def createHash(path_to_file, hasher=sha256(), BLOCKSIZE=4096):
+def createHash(path_to_file, hasher=sha256, BLOCKSIZE=4096):
+    hasher = sha256()
     if not path_to_file.endswith("~"):
         with open(path_to_file, encoding="utf-8") as filepath:
             buf = filepath.read(BLOCKSIZE)
