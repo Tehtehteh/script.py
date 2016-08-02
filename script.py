@@ -42,8 +42,8 @@ def get_filepaths(directory):
     file_paths = []
     for root, directories, files in os.walk(directory):
         for filename in files:
-            filepath = os.path.join(root, filename)
-            file_paths.append(filepath)
+            #filepath = os.path.join(root, filename)
+            file_paths.append(os.path.join(root,filename))
     return file_paths
 
 #--------------------- CREATE FILE HASH, ARGUMENT IS ABSOLUTE PATH TO FILE -------------------------#
@@ -137,11 +137,15 @@ def updateDBCron(userlist, extensions, path):
                                     cur.execute("insert into File values(?,?,?,?,?,?,?)",(file, createHash(file), '',1,
                                                                                       time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                       0,user))
-                        if file.endswith(extensions) and createHash(file)!=cur.execute("Select * from file where path='{}'".format(file)).fetchall()[0][1]:
-                            print(cur.execute("Select old_hash from file where path='{}'".format(file)).fetchall()[0], "-------old hash at ", file)
-                            print(createHash(file), "--------------new hash file at", file)
+                        if file.endswith(extensions) and createHash(file)!=cur.execute("Select *"
+                                                                                       " from file where path='{}'".format(file)).fetchall()[0][1]:
                             cur.execute("Update file set new_hash='{0}' where path='{1}'".format(createHash(file), file))
-                            print("Update query ------ accepted FROM FILE", file, "AND HIS NEW HASH IS ", createHash(file))
+                        elif file.endswith(extensions):
+                            try:
+                                createHash(file)
+                            except FileNotFoundError:
+                                #TODO check if file is removed (set flag exists to 0)
+                                pass
         except Exception as e:
             with open("error.log", "a+", encoding="utf-8") as log:
                 log.write(str(e) + " ".join(str(datetime.now().time())) + "\n")
@@ -160,4 +164,4 @@ def main():
 if __name__=='__main__':
     main()
 
-#TODO error.log and success.log
+#TODO and success.log
