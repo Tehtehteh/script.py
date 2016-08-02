@@ -1,6 +1,6 @@
 import os
 import sqlite3 as lite
-from hashlib import sha256
+from hashlib import md5
 from datetime import datetime
 import time
 
@@ -48,13 +48,13 @@ def get_filepaths(directory):
 
 #--------------------- CREATE FILE HASH, ARGUMENT IS ABSOLUTE PATH TO FILE -------------------------#
 
-def createHash(path_to_file, hasher=sha256, BLOCKSIZE=4096):
-    hasher = sha256()
+def createHash(path_to_file, BLOCKSIZE=1024):
+    hasher = md5()
     if not path_to_file.endswith("~"):
-        with open(path_to_file, encoding="utf-8") as filepath:
+        with open(path_to_file, "rb") as filepath:
             buf = filepath.read(BLOCKSIZE)
             while len(buf) > 0:
-                hasher.update(b'buf')
+                hasher.update(buf)
                 buf = filepath.read(BLOCKSIZE)
             return hasher.hexdigest()[:16]
 
@@ -138,7 +138,7 @@ def updateDBCron(userlist, extensions, path):
                                                                                       time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                       0,user))
                         if file.endswith(extensions) and createHash(file)!=cur.execute("Select * from file where path='{}'".format(file)).fetchall()[0][1]:
-                            print(cur.execute("Select * from file where path='{}'".format(file)).fetchall()[0][1], "-------old hash at ", file)
+                            print(cur.execute("Select old_hash from file where path='{}'".format(file)).fetchall()[0], "-------old hash at ", file)
                             print(createHash(file), "--------------new hash file at", file)
                             cur.execute("Update file set new_hash='{0}' where path='{1}'".format(createHash(file), file))
                             print("Update query ------ accepted FROM FILE", file, "AND HIS NEW HASH IS ", createHash(file))
