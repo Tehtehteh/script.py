@@ -141,11 +141,9 @@ def updateDBCron(userlist, extensions, path):
                                                                                        " from file where path='{}'".format(file)).fetchall()[0][1]:
                             cur.execute("Update file set new_hash='{0}' where path='{1}'".format(createHash(file), file))
                         elif file.endswith(extensions):
-                            try:
-                                createHash(file)
-                            except FileNotFoundError:
-                                #TODO check if file is removed (set flag exists to 0)
-                                pass
+
+                            #TODO check if file is not exists in DB -> add new file to DB
+                            pass
         except Exception as e:
             with open("error.log", "a+", encoding="utf-8") as log:
                 log.write(str(e) + " ".join(str(datetime.now().time())) + "\n")
