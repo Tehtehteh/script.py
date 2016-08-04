@@ -3,6 +3,27 @@ import sqlite3 as lite
 from hashlib import md5
 from datetime import datetime
 import time
+from configparser import ConfigParser
+
+#------------ USER's LIST GENERATOR --------------------------#
+def initString(users):
+    for user in users:
+        yield user
+
+
+#------------------- INIT CONFIG IF NOT EXISTS, PASS IF EXISTS ------------#
+def initConfig(path, users, extensions):
+    if os.path.exists(path+"config.ini"):
+        pass
+    else:
+        with open(path + "config.ini", "w+", encoding="UTF-8") as f:
+            cfg = ConfigParser()
+            cfg.read(path + "config.ini")
+            cfg.add_section("MAIN")
+            cfg['MAIN']['Users'] = ','.join(initString(users))
+            cfg.write(f)
+
+#TODO config for extensions, excludes and users
 
 #------------- GET LIST OF USERS DIRECTORIES (STR) --------------------#
 
@@ -154,6 +175,7 @@ def main():
     old_path = "/home/user6/userstest/"
     extensions = (".php", ".js", ".html", ".css")
     users = list(initUsers(path=old_path))[0]
+    initConfig(old_path, users)
     if (not os.path.exists("test.db")):
         initDBFromScratch(users, extensions, old_path)
     else:
@@ -162,4 +184,4 @@ def main():
 if __name__=='__main__':
     main()
 
-#TODO and success.log
+#TODO success.log
