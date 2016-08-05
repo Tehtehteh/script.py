@@ -10,17 +10,36 @@ def initString(users):
     for user in users:
         yield user
 
-
+#--------------- NEW INIT CONFIG -------------------------#
+def newinitConfig(path):
+    cfg = ConfigParser()
+    if os.path.exists(path + "config.ini"):
+        cfg.read(path + "config.ini")
+        cfg.add_section("MAIN")
+        pass
+    #TODO generate valid config file and set users based on set(users) - set(excludes)
 #------------------- INIT CONFIG IF NOT EXISTS, PASS IF EXISTS ------------#
 def initConfig(path, users, extensions):
-    if os.path.exists(path+"config.ini"):
-        pass
+    cfg = ConfigParser()
+    if os.path.exists(path + "config.ini"):
+        cfg.read(path + "config.ini")
+        excludes = cfg['MAIN']['excludes'].split("\n")
+        extensions_conf = cfg['MAIN']['extensions'].split('\n')
+        with open(path + "config.ini", "w+", encoding="UTF-8") as f:
+            cfg_new = ConfigParser()
+            cfg_new.read(path + "config.ini")
+            cfg_new.add_section('MAIN')
+            cfg_new['MAIN']['Users'] = '\n'.join(set(users) - set(cfg['MAIN']['excludes'].split('\n')))
+            print(users)
+            cfg_new['MAIN']['extensions'] = '\n'.join(extensions_conf)
+            cfg_new['MAIN']['excludes'] = '\n'.join(excludes)
+            cfg_new.write(f)
     else:
         with open(path + "config.ini", "w+", encoding="UTF-8") as f:
-            cfg = ConfigParser()
-            cfg.read(path + "config.ini")
             cfg.add_section("MAIN")
-            cfg['MAIN']['Users'] = ','.join(initString(users))
+            cfg['MAIN']['Users'] = '\n'.join(list(os.walk(path))[0][1])
+            cfg['MAIN']['extensions'] = '\n'.join(extensions)
+            cfg['MAIN']['excludes'] = ''
             cfg.write(f)
 
 #TODO config for extensions, excludes and users
@@ -63,7 +82,6 @@ def get_filepaths(directory):
     file_paths = []
     for root, directories, files in os.walk(directory):
         for filename in files:
-            #filepath = os.path.join(root, filename)
             file_paths.append(os.path.join(root,filename))
     return file_paths
 
@@ -174,8 +192,9 @@ def main():
     new_path = "/var/www/"
     old_path = "/home/user6/userstest/"
     extensions = (".php", ".js", ".html", ".css")
-    users = list(initUsers(path=old_path))[0]
-    initConfig(old_path, users)
+    users = list(initUsers(old_path))[0]
+    cfg = ConfigParser()
+    initConfig(old_path, list(initUsers(old_path))[0], extensions)
     if (not os.path.exists("test.db")):
         initDBFromScratch(users, extensions, old_path)
     else:
