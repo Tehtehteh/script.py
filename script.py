@@ -152,8 +152,8 @@ def userCreated(user, extensions, cur, path):
         try:
             cur.execute("insert into Users values ('{}')".format(user))
             for file in get_filepaths(os.path.join(path+user)):
-                if file not in [x[0] for x in cur.execute("Select * from File").fetchall()] and file.endswith(extensions):
-                    cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, createHash(file), '', 1,
+                if (file) not in [x[0] for x in cur.execute("Select * from File").fetchall()] and file.endswith(extensions):
+                    cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                                time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                0, user))
         except Exception as e:
@@ -161,6 +161,20 @@ def userCreated(user, extensions, cur, path):
                     log.write(str(e) + " ".join(str(datetime.now().time())) + "\n")
 
 # ----------------- UPDATE DB IN CRON ------------------------#
+def updateDBinCron(userList, extensions, path, db_name):
+    with lite.connect(db_name) as con:
+        cur = con.cursor()
+        try:
+            for user in userList:
+                if user not in [x[0] for x in cur.execute("SELECT * FROM USERS").fetchall()]:
+                    userCreated(user, extensions, cur, path)
+                else:
+                    for file in get_filepaths(path+user):
+                        pass
+                    #TODO set existence flag to 0, when file not found
+        except Exception as e:
+            print(e)
+
 
 def updateDBCron(userlist, extensions, path):
     with lite.connect("test.db") as con:
