@@ -30,7 +30,6 @@ def initConfig(path, users, extensions, config_name):
             cfg['MAIN']['excludes'] = ''
             cfg.write(f)
 
-#TODO config for extensions, excludes and users
 #------------- GET TUPLE OF USERS, EXTENSIONS -------------------------#
 
 def initEverything(config_name):
@@ -120,6 +119,9 @@ def userCreated(user, extensions, cur, path):
             with open("success.log", "a+", encoding="utf-8") as log:
                 log.write("Successfully added new user({}) and his files @  ".format(user) +  str(datetime.now().time())+ "\n")
 
+
+#TODO drop existing table Files if Users is excluded
+
 # ----------------- UPDATE DB IN CRON ------------------------#
 
 def updateDBCron(userlist, extensions, path, db_name):
@@ -150,7 +152,7 @@ def updateDBCron(userlist, extensions, path, db_name):
             con.commit()
             with open("success.log", "a+", encoding="utf-8") as log:
                 log.write("Successfully updated db at " +  str(datetime.now().time())+ "\n")
-
+        #TODO add drop existent table based on config users (users - excludes)
 #----------------- MAIN FUNC -------------------------------#
 def main():
     new_path = "/var/www/"
@@ -161,8 +163,6 @@ def main():
     db_name = "test.db"
     initConfig(old_path, init_users, init_extensions, config_name)
     users, extensions = initEverything(config_name)
-    #print((extensions))
-    #print(users)
     if (not os.path.exists(db_name)):
         initDBFromScratch(users, extensions, old_path, db_name)
     else:
