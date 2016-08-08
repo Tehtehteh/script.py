@@ -138,13 +138,13 @@ def updateDBCron(userlist, extensions, path, db_name):
                         if file.endswith(extensions) and createHash(file)!=cur.execute("Select *"
                                                                                        " from file where path='{}'".format(file)).fetchall()[0][1]:
                             cur.execute("Update file set new_hash='{0}' where path='{1}'".format(createHash(file), file))
-                        #elif file.endswith(extensions):
-
-                            #TODO check if file is not exists in DB -> add new file to DB
-                            #pass
+                        #for N_file in [x[0] for x in cur.execute("Select path from File")]:
         except Exception as e:
             with open("error.log", "a+", encoding="utf-8") as log:
                 log.write(str(e) + " ".join(str(datetime.now().time())) + "\n")
+        finally:
+            with open("success.log", "a+", encoding="utf-8") as log:
+                log.write("Successfully updated db at " +  str(datetime.now().time()))
 
 #----------------- MAIN FUNC -------------------------------#
 def main():
