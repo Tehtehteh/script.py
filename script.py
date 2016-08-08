@@ -116,6 +116,9 @@ def userCreated(user, extensions, cur, path):
         except Exception as e:
                 with open("error.log", "a+", encoding="utf-8") as log:
                     log.write(str(e) + " ".join(str(datetime.now().time())) + "\n")
+        finally:
+            with open("success.log", "a+", encoding="utf-8") as log:
+                log.write("Successfully added new user({}) and his files @  ".format(user) +  str(datetime.now().time())+ "\n")
 
 # ----------------- UPDATE DB IN CRON ------------------------#
 
@@ -167,5 +170,3 @@ def main():
 
 if __name__=='__main__':
     main()
-
-#TODO success.log
