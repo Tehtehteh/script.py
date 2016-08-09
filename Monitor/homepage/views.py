@@ -14,6 +14,7 @@ def index(request):
 
 
 #todo add state flag to each users and count in reviews.
+
 @login_required(login_url="/admin/")
 def user(request, idn=None):
     User = Users.objects.filter(name=idn)

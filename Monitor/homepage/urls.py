@@ -4,5 +4,4 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^(?P<idn>[A-z0-9\s]+)$', views.user),
-    #todo add normal routing one page per user
 ]
