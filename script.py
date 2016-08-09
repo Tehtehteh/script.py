@@ -85,8 +85,8 @@ def initDBFromScratch(userlist, extensions, path, db_name):
     with lite.connect(db_name) as con:
         cur = con.cursor()
         try:
-            cur.execute("create table Users (name TEXT primary key)")
-            cur.execute("create table File (path TEXT primary key, old_hash TEXT, new_hash TEXT, flag_exists INTEGER,"
+            cur.execute("create table Users (name TEXT primary key not null)")
+            cur.execute("create table File (path TEXT primary key not null, old_hash TEXT, new_hash TEXT, flag_exists INTEGER,"
                         "date_checked datetime, accepted INTEGER, name TEXT, foreign key(name) references Users(name))")
             for user in userlist:
                 cur.execute("insert into Users values (?)", (user,))
@@ -152,7 +152,7 @@ def updateDBCron(userlist, extensions, path, db_name):
             con.commit()
             with open("success.log", "a+", encoding="utf-8") as log:
                 log.write("Successfully updated db at " +  str(datetime.now().time())+ "\n")
-        #TODO add drop existent table based on config users (users - excludes)
+
 #----------------- MAIN FUNC -------------------------------#
 def main():
     new_path = "/var/www/"

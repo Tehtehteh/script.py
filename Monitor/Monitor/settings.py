@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'Monitor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'test.db'),
     }
 }
 
@@ -118,5 +118,5 @@ USE_TZ = True
 #TODO static root directory + templates
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = ""
+#STATIC_ROOT = "/home/user6/PycharmProjects/script.py/Monitor/static/"
 STATIC_URL = '/static/'
