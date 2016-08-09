@@ -8,11 +8,11 @@
 </head>
 <body>
     <div class="jumbotron">
-        {% for file in objects%}
         <ol>
-            <li>{{ file.path }}</li>
+            {% for user in users%}
+            <li>{{ user.name }}</li>
+            {% endfor %}
         </ol>
-        {% endfor %}
     </div>
 </body>
 </html>
