@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% loadstaticfiles %}
+    {% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type = "text/css"/>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Nice monitor such wow</title>
 </head>
 <body>
-
+    <div class="jumbotron">
+        <ul>
+            {% for file in file_list %}
+                <li>{{file.path}}</li> <span>{{file.old_hash}}</span><span>{{file.new_hash}}</span>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

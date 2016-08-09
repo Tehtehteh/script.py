@@ -8,12 +8,12 @@
 </head>
 <body>
     <div class="header">
-        <h3>Hello world.</h3>
+        <h3>Monitoring system БЕТА</h3>
     </div>
     <div class="jumbotron">
         <ol>
             {% for user in users%}
-            <li>{{ user.name }}</li>
+            <a href="{{ user.name }}"><li>{{ user.name }}</li></a>
             {% endfor %}
         </ol>
     </div>

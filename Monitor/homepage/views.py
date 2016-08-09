@@ -2,6 +2,9 @@ from django.shortcuts import render
 from .models import File, Users
 from django.contrib.auth.decorators import login_required
 
+
+
+
 @login_required(login_url='/admin/')
 def index(request):
     file_list = File.objects.all()
@@ -10,7 +13,7 @@ def index(request):
 
 
 
-
+#todo add state flag to each users and count in reviews.
 @login_required(login_url="/admin/")
 def user(request, idn=None):
     User = Users.objects.filter(name=idn)
