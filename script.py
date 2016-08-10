@@ -135,7 +135,7 @@ def updateDBCron(userlist, extensions, path, db_name):
                     for file in get_filepaths(os.path.join(path + user)):
                         if file not in [x[0] for x in cur.execute("Select * from File where name='{}'".format(user)).fetchall()]\
                                 and file.endswith(tuple(extensions)):
-                                    cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, createHash(file), '', 1,
+                                    cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                                       time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                       0, user))
                         elif file.endswith(tuple(extensions)) and createHash(file)!=cur.execute("Select *"
@@ -160,7 +160,7 @@ def main():
     init_extensions = (".php", ".js", ".html", ".css")
     init_users = list(initUsers(old_path))[0]
     config_name = "config.ini"
-    db_name = "test.db"
+    db_name = "Monitor/test.db"
     initConfig(old_path, init_users, init_extensions, config_name)
     users, extensions = initEverything(config_name)
     if (not os.path.exists(db_name)):

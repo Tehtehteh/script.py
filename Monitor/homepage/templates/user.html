@@ -11,10 +11,14 @@
         <ol>
             {% for file in file_list %}
                 <li>{{file.path}}</li>
-                {% if file.old_hash and file.old_hash != file.new_hash%}
+                {% if file.old_hash and file.old_hash != file.new_hash and file.flag_exists == 1%}
                     <span class="label label-warning">Changed</span>
-                {% else %}
-                    <span style="color: red">Removed</span>
+                {% endif %}
+                {% if file.flag_exists == 0 %}
+                    <span class="label label-danger">Removed</span>
+                {% endif %}
+                {% if not file.old_hash|length and file.new_hash != file.old_hash %}
+                    <span class="label label-info">New</span>
                 {% endif %}
             {% endfor %}
         </ol>
