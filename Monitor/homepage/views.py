@@ -18,6 +18,4 @@ def user(request, idn=None):
     User = Users.objects.filter(name=idn)
     file_list = File.objects.filter(name=User)
     new_file_list = File.objects.filter(old_hash='').all()
-    #changed_file_list = File.objects.objects.exclude(old_hash=new_hash).all()
-    #print(changed_file_list)
     return render(request, 'user.html', {'file_list':file_list})

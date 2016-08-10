@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="{{ static('css/bootstrap.min.css') }}" type = "text/css"/>
+    <meta charset="UTF-8">
+    <title>Nice monitor such wow</title>
+</head>
+<body>
+    <div class="jumbotron">
+        <table class="table">
+            <thead>
+                <th>#</th>
+                <th>File name</th>
+                <th>Extension of this file</th>
+                <th>Flag</th>
+            </thead>
+            <tbody>
+                {% set i = 1 -%}
+                {% for file in file_list %}
+                <tr>
+                    <th scope="row">{{i}}</th>
+                    <td>{{file.path}}</td>
+                    <td>{{file.path[-4:]}}</td>
+                    {% if file.old_hash and file.old_hash != file.new_hash and file.flag_exists == 1%}
+                        <td><span class="label label-warning">Changed</span><td>
+                    {% endif %}
+                    {% if file.flag_exists == 0 %}
+                        <td><span class="label label-danger">Removed</span></td>
+                    {% endif %}
+                    {% if not file.old_hash and file.new_hash != file.old_hash %}
+                        <td><span class="label label-info">New</span></td>
+                    {% endif %}
+                    {% set i = i + 1 %}
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
