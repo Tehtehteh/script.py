@@ -22,6 +22,9 @@ class File(models.Model):
     def __str__(self):
         return self.path
 
+    def __repr__(self):
+        return self.path
+
     class Meta:
         managed = False
         db_table = 'File'
@@ -31,6 +34,9 @@ class Users(models.Model):
     name = models.TextField(primary_key=True)
 
     def __str__(self):
+        return self.name
+
+    def __repr__(self):
         return self.name
 
     class Meta:
