@@ -19,6 +19,9 @@ class File(models.Model):
     accepted = models.IntegerField(blank=True, null=True)
     name = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return self.path
+
     class Meta:
         managed = False
         db_table = 'File'
@@ -26,6 +29,9 @@ class File(models.Model):
 
 class Users(models.Model):
     name = models.TextField(primary_key=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         managed = False

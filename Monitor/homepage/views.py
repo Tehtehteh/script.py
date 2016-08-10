@@ -1,9 +1,7 @@
 from django.shortcuts import render
 from .models import File, Users
 from django.contrib.auth.decorators import login_required
-
-
-
+from django.db.models import F, Q
 
 @login_required(login_url='/admin/')
 def index(request):
@@ -19,4 +17,7 @@ def index(request):
 def user(request, idn=None):
     User = Users.objects.filter(name=idn)
     file_list = File.objects.filter(name=User)
-    return render(request, "user.html", {'file_list':file_list})
+    new_file_list = File.objects.filter(old_hash='').all()
+    #changed_file_list = File.objects.objects.exclude(old_hash=new_hash).all()
+    #print(changed_file_list)
+    return render(request, 'user.html', {'file_list':file_list})

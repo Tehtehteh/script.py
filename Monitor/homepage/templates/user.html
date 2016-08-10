@@ -8,11 +8,16 @@
 </head>
 <body>
     <div class="jumbotron">
-        <ul>
+        <ol>
             {% for file in file_list %}
-                <li>{{file.path}}</li> <span>{{file.old_hash}}</span><span>{{file.new_hash}}</span>
+                <li>{{file.path}}</li>
+                {% if file.old_hash and file.old_hash != file.new_hash%}
+                    <span class="label label-warning">Changed</span>
+                {% else %}
+                    <span style="color: red">Removed</span>
+                {% endif %}
             {% endfor %}
-        </ul>
+        </ol>
     </div>
 </body>
 </html>

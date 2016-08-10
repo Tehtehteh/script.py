@@ -4,7 +4,7 @@
     {% load staticfiles %}
 	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type = "text/css"/>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Such monitor</title>
 </head>
 <body>
     <div class="header">
@@ -13,7 +13,7 @@
     <div class="jumbotron">
         <ol>
             {% for user in users%}
-            <a href="{{ user.name }}"><li>{{ user.name }}</li></a>
+            <li><a href="{{ user.name }}">{{ user.name }}</a></li>
             {% endfor %}
         </ol>
     </div>
