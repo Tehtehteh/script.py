@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import File, Users
 from django.contrib.auth.decorators import login_required
-from configparser import ConfigParser
+import os
 
 @login_required(login_url='/admin/')
 def index(request):
@@ -10,11 +10,13 @@ def index(request):
 
 
 
-#todo add state flag to each users and count in reviews.
+#todo get request button -> accept changes
 
 @login_required(login_url='/admin/')
 def user(request, idn=None):
     file_list = File.objects.filter(name=idn)
-    php_len = len(list(filter(lambda x: x.path.endswith(".php"),list(file_list))))
     ext = {}
-    return render(request, 'user.html', {'file_list':file_list, 'php': php_len, 'js':len(list(filter(lambda x: x.path.endswith(".js"), file_list)))})
+    for file in file_list:
+        if not ext.get(os.path.splitext(file.path )[1]):
+            ext[os.path.splitext(file.path )[1]] = len(list(filter(lambda x: x.path.endswith(os.path.splitext(file.path )[1]), file_list)))
+    return render(request, 'user.html', {'file_list':file_list, 'extensions': ext })

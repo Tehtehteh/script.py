@@ -15,46 +15,45 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <ul class="list-group">
-                          <li class="list-group-item">Количество всех файлов:
+                          <li class="list-group-item">Количество всех файлов
                             <span class="badge">{{file_list|length}}</span>
                           </li>
-                            <li class="list-group-item">Количество файлов с расширением .php:
-                            <span class="badge">{{ file_list[0].path | splitext }}</span>
+                            {% for extension in extensions %}
+                            <li class="list-group-item">Количество файлов с расширением {{ extension }}
+                            <span class="badge">{{ extensions[extension] }}</span>
                             </li>
-                            <li class="list-group-item">Количество файлов с расширением .js:
-                                <span class="badge">{{ js }}</span>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
+                    <button class="btn btn-primary" style="float: right; margin-right: 20px;" >Accept changes</button>
                 </div>
-                <button class="btn btn-default" style="float: right;" >Accept changes</button>
             </div>
         </div>
         <div class="panel panel-default">
-            <div class="panel-heading"><strong>Monitoring system beta.</strong></div>
+            <div class="panel-heading"><strong>File list</strong></div>
             <table class="table">
                 <thead>
                     <th>#</th>
+                    <th>Flag</th>
                     <th>File name</th>
                     <th>Extension of this file</th>
-                    <th>Flag</th>
                 </thead>
                 <tbody>
                     {% set i = 1 -%}
                     {% for file in file_list %}
                     <tr>
                         <th scope="row">{{i}}</th>
-                        <td>{{file.path}}</td>
-                        <td>{{ file.path.split('.')[1]}}</td>
                         {%- if file.old_hash==file.new_hash and file.flag_exists == 1 -%}
                             <td><span class="label label-success">Checked</span></td>
                         {%- elif file.old_hash and file.old_hash != file.new_hash and file.flag_exists == 1 -%}
-                            <td><span class="label label-warning">Changed</span><td>
+                            <td><span class="label label-warning">Changed</span></td>
                         {%- elif file.flag_exists == 0 -%}
                             <td><span class="label label-danger">Removed</span></td>
                         {%- elif not file.old_hash and file.new_hash != file.old_hash -%}
                             <td><span class="label label-info">New</span></td>
                         {%- endif -%}
+                        <td>{{file.path}}</td>
+                        <td>{{ file.path.split('.')[1]}}</td>
                         {%- set i = i + 1 -%}
                     </tr>
                         {%- endfor -%}
