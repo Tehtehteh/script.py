@@ -10,11 +10,11 @@
         <h3>Monitoring system БЕТА</h3>
     </div>
     <div class="jumbotron">
-        <ol>
-            {% for user in users%}
-            <li><a href="{{ user.name }}">{{ user.name }}</a></li>
+        <ul class="list-group">
+            {% for user in users %}
+            <a href="{{user.name}}"><li class="list-group-item">{{ user.name }}</li></a>
             {% endfor %}
-        </ol>
+        </ul>
     </div>
 </body>
 </html>

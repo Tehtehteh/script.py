@@ -154,20 +154,19 @@ def updateDBCron(userlist, extensions, path, db_name):
                 log.write("Successfully updated db at " +  str(datetime.now().time())+ "\n")
 
 #----------------- MAIN FUNC -------------------------------#
-def main(*args):
+def main():
     new_path = "/var/www/"
     old_path = "/home/user6/userstest/"
-    args_path = args[0]
     init_extensions = (".php", ".js", ".html", ".css")
-    init_users = list(initUsers(args_path))[0]
+    init_users = list(initUsers(old_path))[0]
     config_name = "config.ini"
     db_name = "Monitor/test.db"
-    initConfig(args_path, init_users, init_extensions, config_name)
+    initConfig(old_path, init_users, init_extensions, config_name)
     users, extensions = initEverything(config_name)
     if (not os.path.exists(db_name)):
-        initDBFromScratch(users, extensions, args_path, db_name)
+        initDBFromScratch(users, extensions, old_path, db_name)
     else:
-        updateDBCron(users, extensions, args_path, db_name)
+        updateDBCron(users, extensions, old_path, db_name)
 
 if __name__=='__main__':
     main()

@@ -3,7 +3,7 @@ from .models import File, Users
 from django.contrib.auth.decorators import login_required
 import os
 
-@login_required(login_url='/admin/')
+#@login_required(login_url='/admin/')
 def index(request):
     user_list = Users.objects.all()
     return render(request, "index.html", {'users':user_list})
@@ -12,7 +12,7 @@ def index(request):
 
 #todo get request button -> accept changes
 
-@login_required(login_url='/admin/')
+#@login_required(login_url='/admin/')
 def user(request, idn=None):
     file_list = File.objects.filter(name=idn)
     ext = {}
