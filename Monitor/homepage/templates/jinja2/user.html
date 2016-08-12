@@ -10,12 +10,13 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <button class="btn btn-default" onclick="return location.href='/'"><</button>
-                <h3>Summary of <strong>{{file_list[0].name}}</strong></h3>
+                <span>Summary of <strong> {{user}}</strong></span>
             </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-3">
                         <ul class="list-group">
+                            {% if not error|length %}
                           <li class="list-group-item">Количество всех файлов
                             <span class="badge">{{file_list|length}}</span>
                           </li>
@@ -24,10 +25,14 @@
                             <span class="badge">{{ extensions[extension] }}</span>
                             </li>
                             {% endfor %}
+                            {% endif %}
                         </ul>
                     </div>
                     <button class="btn btn-primary" style="float: right; margin-right: 20px;" >Accept changes</button>
                 </div>
+            </div>
+            <div class="panel-footer">
+
             </div>
         </div>
         <div class="panel panel-default">
@@ -35,11 +40,12 @@
             <table class="table">
                 <thead>
                     <th>#</th>
-                    <th>Flag</th>
-                    <th>File name</th>
-                    <th>Extension of this file</th>
+                    <th>Флаг</th>
+                    <th>Имя файла (абсолютный путь)</th>
+                    <th>Расширение</th>
                 </thead>
                 <tbody>
+                    {% if not error|length %}
                     {% set i = 1 -%}
                     {% for file in file_list %}
                     <tr>
@@ -50,16 +56,20 @@
                             <td><span class="label label-warning">Changed</span></td>
                         {%- elif file.flag_exists == 0 -%}
                             <td><span class="label label-danger">Removed</span></td>
-                        {%- elif not file.old_hash and file.new_hash != file.old_hash -%}
+                        {%- elif not file.old_hash and file.new_hash != file.old_hash and file.flag_exists==1 -%}
                             <td><span class="label label-info">New</span></td>
                         {%- endif -%}
                         <td>{{file.path}}</td>
-                        <td>{{ file.path.split('.')[1]}}</td>
+                        <td>{{ file.path.split('.')[-1]}}</td>
                         {%- set i = i + 1 -%}
                     </tr>
                         {%- endfor -%}
+                    {% endif %}
                 </tbody>
             </table>
+            <div class="panel-footer">
+                <p>© Tehtehteh 2016</p>
+            </div>
         </div>
 </body>
 </html>

@@ -14,9 +14,15 @@ def index(request):
 
 #@login_required(login_url='/admin/')
 def user(request, idn=None):
-    file_list = File.objects.filter(name=idn)
-    ext = {}
-    for file in file_list:
-        if not ext.get(os.path.splitext(file.path )[1]):
-            ext[os.path.splitext(file.path )[1]] = len(list(filter(lambda x: x.path.endswith(os.path.splitext(file.path )[1]), file_list)))
-    return render(request, 'user.html', {'file_list':file_list, 'extensions': ext })
+    err = ''
+    try:
+        file_list = File.objects.filter(name=idn)
+        ext = {}
+        for file in file_list:
+            if not ext.get(os.path.splitext(file.path )[1]):
+                ext[os.path.splitext(file.path )[1]] = len(list(filter(lambda x: x.path.endswith(os.path.splitext(file.path )[1]), file_list)))
+    except:
+        file_list = []
+        ext = []
+        err="No files."
+    return render(request, 'user.html', {'user':idn, 'file_list':file_list, 'extensions': ext, 'error':err })

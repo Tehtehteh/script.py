@@ -1,3 +1,6 @@
 span.badge:hover {
     background-color: blue;
 }
+.panel-footer p{
+    text-align: center;
+}
