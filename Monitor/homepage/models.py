@@ -10,6 +10,13 @@ from __future__ import unicode_literals
 from django.db import models
 
 
+class Users(models.Model):
+    name = models.TextField(primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Users'
+
 class File(models.Model):
     path = models.TextField(primary_key=True)
     old_hash = models.TextField(blank=True, null=True)
@@ -24,12 +31,7 @@ class File(models.Model):
         db_table = 'File'
 
 
-class Users(models.Model):
-    name = models.TextField(primary_key=True)
 
-    class Meta:
-        managed = False
-        db_table = 'Users'
 
 
 class DjangoMigrations(models.Model):

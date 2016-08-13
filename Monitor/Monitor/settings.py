@@ -30,7 +30,13 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+REST_FRAMEWORK = {
+    #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 10
+}
+
 INSTALLED_APPS = [
+    'rest_framework',
     'homepage',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,7 +64,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [os.path.join(BASE_DIR, 'homepage/templates/jinja2')],
         'APP_DIRS': True,
-        'OPTIONS': {'environment': 'Monitor.jinja2.environment',},
+        'OPTIONS': {'environment': 'Monitor.jinja2.environment',}
     },
     # {
     #     'BACKEND': 'django.template.backends.django.DjangoTemplates',
