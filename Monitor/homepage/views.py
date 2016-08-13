@@ -23,7 +23,6 @@ def file_collection(request, idn):
 def user(request, idn=None):
     err = ''
     file_list = File.objects.filter(name=idn)
-    print(file_list[20:], "---------FILES AT USERS:", idn)
     try:
         ext = {}
         for file in file_list:
@@ -33,6 +32,4 @@ def user(request, idn=None):
         file_list = []
         ext = []
         err="No files."
-        print("EXCEPT RABOTAET")
-    print("chto za pizdec AT USER", idn)
     return render(request, 'user.html', {'user':idn, 'file_list':file_list, 'extensions': ext, 'error':err })
