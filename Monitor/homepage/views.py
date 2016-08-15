@@ -11,6 +11,10 @@ def index(request):
     return render(request, "index.html", {'users':user_list})
 
 
+
+#todo different api's for dirrefect file flags.
+
+
 @api_view(['GET'])
 def file_collection(request, idn):
     files = File.objects.filter(name=idn)
