@@ -1,32 +1,19 @@
 
 $(document).ready(function() {
-loadFiles(window.location.pathname.slice(1,window.location.pathname.length));
+    loadFiles(window.location.pathname.slice(1,window.location.pathname.length));
 });
-
+var flags = {'New':"label-info", 'Changed':'label-warning', 'Checked':'label-success', 'Removed':'label-danger'};
 function loadFiles(username){
         console.log("working on files @", username);
         $.ajax({
-            url: "api/files/" + username,
+            url: "api/flagfiles/" + username,
             type: "GET",
             success: function(files){
+            console.log(files[0].path.split(".")[files[0].path.split(".").length-1]);
                 for (var i =0; i < files.length; i++){
-                    $("<tr>\n<th scope='row'>" + (i+1) + "</th>\n" + getFlag(files[i]) + "<td>" + files[i].path +
-                    "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>").hide().appendTo(".my-tbody").fadeIn(i*20 + 1000);
+                    $(".my-tbody").append("<tr>\n<th scope='row'>"+i+"</th>\n<td><span class=" + ("'label " + flags[files[i].flag]) +  "'>" + files[i].flag +"</span></td>" +  "<td>" + files[i].path +
+                   "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>")
 
                 }}
             });
-    }
-function getFlag(file){
-        if (file.old_hash!="" && file.new_hash!=""){
-           return "<td><span class=\"label label-warning\">Changed</span></td>";
-        }
-        else if (file.flag_exists == 0){
-            return "<td><span class=\"label label-danger\">Removed</span></td>";
-        }
-        else if (file.old_hash == file.new_hash || file.old_hash!="" && file.new_hash=="") {
-            return "<td><span class=\"label label-success\">Checked</span></td>";
-        }
-        else if (file.old_hash=="" && file.flag_exists == 1) {
-            return "<td><span class=\"label label-info\">New</span></td>"
-        }
     }
