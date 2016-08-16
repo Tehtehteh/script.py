@@ -16,3 +16,4 @@ class FileFlagSerializer(serializers.Serializer):
 class UsersSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     count = serializers.IntegerField()
+    Changed= serializers.BooleanField()
