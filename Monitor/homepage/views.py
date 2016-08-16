@@ -5,21 +5,39 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import FileSerializer, FileFlagSerializer, UsersSerializer
 
+
+
 #@login_required(login_url='/admin/')
 def index(request):
-    user_list = Users.objects.all()
-    return render(request, "index.html", {'users':user_list})
+    return render(request, "index.html")
 
+#todo show changes in index.html
 
+#todo make accordion file list which depends on flags.
 
-#todo insert API to homepage (get files)
 
 @api_view(['GET'])
 def userCollection(request):
     collection = []
     userList = Users.objects.all()
     for user in userList:
-        collection.append({'name': user.name, 'count':len(File.objects.filter(name=user.name))})
+        scopeFiles = File.objects.filter(name=user.name)
+        for file in scopeFiles:
+            if file.old_hash == '' and file.new_hash != '' and file.flag_exists == 1:
+                collection.append({'name': user.name, 'count': len(File.objects.filter(name=user.name)),'Changed': True})
+                break
+            elif file.new_hash != '' and file.new_hash != file.old_hash and file.old_hash != "":
+                collection.append(
+                    {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': True})
+                break
+            elif file.flag_exists == 0:
+                collection.append(
+                    {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': True})
+                break
+            else:
+                collection.append(
+                    {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': False})
+                break
     serializer = UsersSerializer(collection, many=True)
     return Response(serializer.data)
 
