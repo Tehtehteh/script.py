@@ -18,7 +18,6 @@ def initConfig(path, users, extensions, config_name):
             cfg_new.read(config_name)
             cfg_new.add_section('MAIN')
             cfg_new['MAIN']['Users'] = '\n'.join(set(users) - set(cfg['MAIN']['excludes'].split('\n')))
-            #print(users)
             cfg_new['MAIN']['extensions'] = '\n'.join(extensions_conf)
             cfg_new['MAIN']['excludes'] = '\n'.join(excludes)
             cfg_new.write(f)
@@ -87,7 +86,7 @@ def initDBFromScratch(userlist, extensions, path, db_name):
         try:
             cur.execute("create table Users (name TEXT primary key not null)")
             cur.execute("create table File (path TEXT primary key not null, old_hash TEXT, new_hash TEXT, flag_exists INTEGER,"
-                        "date_checked datetime, accepted INTEGER, name TEXT, foreign key(name) references Users(name))")
+                        "date_checked datetime, accepted INTEGER, name TEXT, foreign key(name) references Users(name) on delete cascade)")
             for user in userlist:
                 cur.execute("insert into Users values (?)", (user,))
                 for file in get_filepaths(os.path.join(path + user)):
@@ -160,7 +159,7 @@ def main():
     init_extensions = (".php", ".js", ".html", ".css")
     init_users = list(initUsers(old_path))[0]
     config_name = "config.ini"
-    db_name = "Monitor/test.db"
+    db_name = "test.db"
     initConfig(old_path, init_users, init_extensions, config_name)
     users, extensions = initEverything(config_name)
     if (not os.path.exists(db_name)):
