@@ -21,7 +21,7 @@
                         <ul class="list-group">
                             {% if not error|length %}
                           <li class="list-group-item">Количество всех файлов
-                            <span class="badge">{{file_list|length}}</span>
+                            <span class="badge my-badge"></span>
                           </li>
                             {% for extension in extensions %}
                             <li class="list-group-item">Количество файлов с расширением {{ extension }}
@@ -31,7 +31,9 @@
                             {% endif %}
                         </ul>
                     </div>
-                    <button class="btn btn-primary" style="float: right; margin-right: 20px;" onclick="loadFiles({{user}})">Принять изменения</button>
+                    <form action="#" method="get">
+                        <button class="btn btn-primary " name="acceptButton" value="accept" style="float: right; margin-right: 20px;" >Принять изменения</button>
+                    </form>
                 </div>
             </div>
             <div class="panel-footer">

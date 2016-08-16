@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import File, Users
 import os
 from rest_framework.decorators import api_view
@@ -30,13 +30,12 @@ def file_flag_collection(request, idn=None):
     for file in scopeFiles:
         if file.old_hash == '' and file.new_hash !='' and file.flag_exists == 1:
             fileList.append({'path':file.path, 'flag':'New'})
-        elif file.old_hash !='' and file.new_hash !=file.old_hash:
+        elif file.new_hash!='' and file.new_hash !=file.old_hash and file.old_hash!="":
             fileList.append({'path': file.path, 'flag':'Changed'})
         elif file.flag_exists == 0:
             fileList.append({'path':file.path, 'flag':'Removed'})
-        elif file.flag_exists == 1 and file.old_hash == file.new_hash :
+        elif file.flag_exists == 1 and file.old_hash == file.new_hash or file.old_hash :
             fileList.append({'path':file.path, 'flag':'Checked'})
-    #fileList.append({'count':len(scopeFiles)})
     serializer = FileFlagSerializer(fileList, many=True)
     return Response(serializer.data)
 
@@ -65,4 +64,12 @@ def user(request, idn=None):
         file_list = []
         ext = []
         err="No files."
-    return render(request, 'user.html', {'user':idn, 'file_list':file_list, 'extensions': ext, 'error':err })
+    if (request.GET.get('acceptButton')):
+        file_list = File.objects.filter(name=idn)
+        for file in file_list:
+            file.old_hash = file.new_hash
+            file.save()
+        File.objects.filter(flag_exists=0, name=idn).delete()
+        print("FILE NAME:", file.path, "FILE OLD HASH:", file.old_hash)
+        return redirect("/"+idn)
+    return render(request, 'user.html', {'user':idn, 'extensions': ext, 'error':err })
