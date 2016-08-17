@@ -11,7 +11,9 @@
 <body>
     <div class="panel panel-default">
             <div class="panel-heading">
-                <button class="btn btn-default" onclick="return location.href='/'"><</button>
+                <button class="btn btn-default" onclick="return location.href='/'">
+                    <div class="arrow-left"></div>
+                </button>
                 <span>Статистика файлов <strong> {{user}}</strong></span>
             </div>
             <div class="panel-body">
@@ -19,11 +21,12 @@
                     <div class="col-sm-3">
                         <ul class="list-group">
                             {% if not error|length %}
-                          <li class="list-group-item">Количество всех файлов
+                          <li class="list-group-item">
+                            Всего файлов
                             <span class="badge my-badge"></span>
                           </li>
                             {% for extension in extensions %}
-                            <li class="list-group-item">Количество файлов с расширением {{ extension }}
+                            <li class="list-group-item">Файлов с расширением {{ extension }}
                             <span class="badge">{{ extensions[extension] }}</span>
                             </li>
                             {% endfor %}
@@ -40,7 +43,7 @@
             </div>
     </div>
     <div class="panel panel-default">
-        <button class="accordion ac-check">Checked<span class="badge" style="margin-left: 20px;">0</span></button>
+        <button class="accordion ac-check"><span class="badge">0</span>Checked</button>
             <div class="my-panel">
                 <table class="table">
                     <thead>
@@ -55,7 +58,7 @@
                     </thead>
                 </table>
             </div>
-            <button class="accordion ac-remov">Removed<span class="badge" style="margin-left: 20px;">0</span></button>
+            <button class="accordion ac-remov"><span class="badge">0</span>Removed</button>
             <div class="my-panel">
                 <table class="table">
                     <thead>
@@ -70,7 +73,7 @@
                     </thead>
                 </table>
             </div>
-            <button class="accordion ac-changed">Changed<span class="badge" style="margin-left: 20px;">0</span></button>
+            <button class="accordion ac-changed"><span class="badge">0</span>Changed</button>
             <div class="my-panel">
                 <table class="table">
                     <thead>
@@ -85,7 +88,7 @@
                     </thead>
                 </table>
             </div>
-            <button class="accordion ac-new">New<span class="badge" style="margin-left: 20px;">0</span></button>
+            <button class="accordion ac-new"><span class="badge">0</span>New</button>
             <div class="my-panel">
                 <table class="table">
                     <thead>
