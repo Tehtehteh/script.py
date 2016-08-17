@@ -2,7 +2,11 @@ span.badge:hover {
     background-color: blue;
 }
 .panel-footer p{
-    text-align: center;
+    text-align: left;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
 }
 button.accordion {
     background-color: #eee;
@@ -14,27 +18,47 @@ button.accordion {
     border: none;
     outline: none;
     transition: 0.4s;
-    text-align: center;
+    text-align: left;
+    font-weight: bold;
+}
+button .badge {
+    margin: -3px 12px 0 0;
 }
 button.accordion.ac-check{
-    background-color: #AEF5B7;
+    background-color: #a2cfa7; /*#AEF5B7;*/
 }
 
 button.accordion.ac-remov{
-    background-color: #ff9d9d;
+    background-color: #d67c7c; /*#ff9d9d;*/
 }
 
 button.accordion.ac-changed{
-    background-color: #FFB973;
+    background-color: #eab785; /*#FFB973;*/
 }
 
 button.accordion.ac-new{
-    background-color: #73B9FF;
+    background-color: #7ca9d6; /*#73B9FF;*/
 }
 
+.table>thead {
+    color: #888888;
+}
 
+.panel-heading > .btn {
+    margin-right: 10px;
+}
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid grey;
+  margin-right: 1px;
+}
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+
 button.accordion.ac-check:hover,button.accordion.ac-check.active {
     background-color: #8bc492;
 }
@@ -55,9 +79,12 @@ div.my-panel {
     padding: 0 18px;
     background-color: white;
     display: none;
+    height: 0px;
+    transition-duration: 2s;
 }
 
 /* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
 div.my-panel.show {
     display: block;
+    height: auto;
 }
