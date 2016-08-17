@@ -11,11 +11,10 @@ function loadFiles(username){
             url: "api/flagfiles/" + username,
             type: "GET",
             success: function(files){
-            console.log(files[0].path.split(".")[files[0].path.split(".").length-1]);
+            console.log("ASDFDSFSDFD")
                 for (var i =0; i < files.length; i++){
                     var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n<td><span class=" + ('"label ' + flags[files[i].flag]) +  '">' + files[i].flag +"</span></td>" +  "<td>" + files[i].path +
                    "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>";
-                console.log(str);
                     $(".my-tbody").append(str);
 
                 }}

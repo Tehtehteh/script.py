@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ static('css/bootstrap.min.css') }}" type = "text/css"/>
+    <link rel="stylesheet" href = "{{ static ('css/my.css')}}" type="text/css"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="{{ static('js/Usersfile.js') }}"></script>
+    <title>Title</title>
+</head>
+<body>
+    <div class="panel panel-default">
+            <div class="panel-heading">
+                <button class="btn btn-default" onclick="return location.href='/'"><</button>
+                <span>Статистика файлов <strong> {{user}}</strong></span>
+            </div>
+            <div class="panel-body">
+                <div class="row my-row">
+                    <div class="col-sm-3">
+                        <ul class="list-group">
+                            {% if not error|length %}
+                          <li class="list-group-item">Количество всех файлов
+                            <span class="badge my-badge"></span>
+                          </li>
+                            {% for extension in extensions %}
+                            <li class="list-group-item">Количество файлов с расширением {{ extension }}
+                            <span class="badge">{{ extensions[extension] }}</span>
+                            </li>
+                            {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <form action="#" method="get">
+                        <button class="btn btn-primary " name="acceptButton" value="accept" style="float: right; margin-right: 20px;" >Принять изменения</button>
+                    </form>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <p>Tehtehtehteh</p>
+            </div>
+    </div>
+    <div class="panel panel-default">
+        <button class="accordion ac-check">Checked<span class="badge" style="margin-left: 20px;">0</span></button>
+            <div class="my-panel">
+                <table class="table">
+                    <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Путь к файлу</th>
+                          <th>Расширение</th>
+                          <th>Дата изменения</th>
+                        </tr>
+                        <tbody id = "Checked">
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+            <button class="accordion ac-remov">Removed<span class="badge" style="margin-left: 20px;">0</span></button>
+            <div class="my-panel">
+                <table class="table">
+                    <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Путь к файлу</th>
+                          <th>Расширение</th>
+                          <th>Дата изменения</th>
+                        </tr>
+                        <tbody id = "Removed">
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+            <button class="accordion ac-changed">Changed<span class="badge" style="margin-left: 20px;">0</span></button>
+            <div class="my-panel">
+                <table class="table">
+                    <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Путь к файлу</th>
+                          <th>Расширение</th>
+                          <th>Дата изменения</th>
+                        </tr>
+                        <tbody id = "Changed">
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+            <button class="accordion ac-new">New<span class="badge" style="margin-left: 20px;">0</span></button>
+            <div class="my-panel">
+                <table class="table">
+                    <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Путь к файлу</th>
+                          <th>Расширение</th>
+                          <th>Дата изменения</th>
+                        </tr>
+                        <tbody id = "New">
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+    </div>
+</body>
+</html>

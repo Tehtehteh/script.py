@@ -4,3 +4,60 @@ span.badge:hover {
 .panel-footer p{
     text-align: center;
 }
+button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    text-align: center;
+}
+button.accordion.ac-check{
+    background-color: #AEF5B7;
+}
+
+button.accordion.ac-remov{
+    background-color: #ff9d9d;
+}
+
+button.accordion.ac-changed{
+    background-color: #FFB973;
+}
+
+button.accordion.ac-new{
+    background-color: #73B9FF;
+}
+
+
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+button.accordion.ac-check:hover,button.accordion.ac-check.active {
+    background-color: #8bc492;
+}
+button.accordion.ac-remov:hover,button.accordion.ac-remov.active {
+    background-color: #cc5c5c;
+}
+
+button.accordion.ac-changed:hover,button.accordion.ac-changed.active {
+    background-color: #e5a667;
+}
+
+button.accordion.ac-new:hover,button.accordion.ac-new.active {
+    background-color: #5c94cc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+div.my-panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+}
+
+/* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
+div.my-panel.show {
+    display: block;
+}

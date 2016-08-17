@@ -69,6 +69,23 @@ def file_collection(request, idn):
 
 #todo get request button -> accept changes
 
+
+def usersfiles(request, idn=None):
+    err = ''
+    file_list = File.objects.filter(name=idn)
+    try:
+        ext = {}
+        for file in file_list:
+            if not ext.get(os.path.splitext(file.path)[1]):
+                ext[os.path.splitext(file.path)[1]] = len(
+                    list(filter(lambda x: x.path.endswith(os.path.splitext(file.path)[1]), file_list)))
+    except:
+        file_list = []
+        ext = []
+        err = "No files."
+    return render(request, "userfiles.html", {'user':idn, 'extensions': ext, 'error':err })
+
+
 #@login_required(login_url='/admin/')
 def user(request, idn=None):
     err = ''
@@ -88,6 +105,5 @@ def user(request, idn=None):
             file.old_hash = file.new_hash
             file.save()
         File.objects.filter(flag_exists=0, name=idn).delete()
-        print("FILE NAME:", file.path, "FILE OLD HASH:", file.old_hash)
         return redirect("/"+idn)
     return render(request, 'user.html', {'user':idn, 'extensions': ext, 'error':err })
