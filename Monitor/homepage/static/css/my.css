@@ -57,7 +57,6 @@ button.accordion.ac-new{
   margin-right: 1px;
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
 
 button.accordion.ac-check:hover,button.accordion.ac-check.active {
     background-color: #8bc492;
@@ -74,7 +73,6 @@ button.accordion.ac-new:hover,button.accordion.ac-new.active {
     background-color: #5c94cc;
 }
 
-/* Style the accordion panel. Note: hidden by default */
 div.my-panel {
     padding: 0 18px;
     background-color: white;
@@ -83,7 +81,6 @@ div.my-panel {
     transition-duration: 2s;
 }
 
-/* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
 div.my-panel.show {
     display: block;
     height: auto;
