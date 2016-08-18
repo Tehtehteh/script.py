@@ -9,7 +9,7 @@ var i;
 for (i = 0; i < acc.length; i++) {
     acc[i].onclick = function(){
         this.classList.toggle("active");
-        $(this.nextElementSibling).slideToggle('fast'); /* 0.2s transition */
+        this.nextElementSibling.classList.toggle("show");
     }
 }
 });
