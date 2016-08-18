@@ -23,7 +23,6 @@ function loadFlagFilesCount(username){
         success: function(files){
             for (let i = 0; i < files.length; i ++){
             flagcount[files[i].flag] ++ ;}
-            console.log(flagcount);
             for (x in flagcount){
                 $(".badge-"+x).append(flagcount[x]);}
         }
@@ -38,8 +37,7 @@ function loadFiles(username){
             success: function(files){
                 for (var i =0; i < files.length; i++){
                     var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n"  +  "<td>" + files[i].path +
-                   "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>";
-                    //$("#"+files[i].flag).append("<button type='button' class='list-group-item'>" + files[i].path + "</button>");
+                   "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>" + "<td>" + files[i].date + "</td>";
                     $("#"+files[i].flag).append(str);
                 }}
             });
