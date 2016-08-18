@@ -7,10 +7,11 @@ $(document).ready(function() {
 var i;
 
 for (i = 0; i < acc.length; i++) {
-    acc[i].onclick = function(){
+    $(acc[i]).next().hide();
+    $(acc[i]).click(function(){
         this.classList.toggle("active");
-        this.nextElementSibling.classList.toggle("show");
-    }
+        $(this.nextElementSibling).slideToggle('fast'); /* 0.2s transition */
+    });
 }
 });
 var flags = {'New':"label-info", 'Changed':'label-warning', 'Checked':'label-success', 'Removed':'label-danger'};
