@@ -11,7 +11,8 @@ class FileSerializer(serializers.ModelSerializer):
 class FileFlagSerializer(serializers.Serializer):
     path = serializers.CharField(max_length=200)
     flag = serializers.CharField(max_length=10)
-    #count = serializers.IntegerField()
+    date = serializers.DateTimeField()
+
 
 class UsersSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
