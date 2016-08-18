@@ -157,7 +157,7 @@ def main():
     new_path = "/var/www/"
     old_path = "/home/user6/userstest/"
     init_extensions = (".php", ".js", ".html", ".css")
-    init_users = list(initUsers(old_path))[0]
+    init_users = [x for x in initUsers(old_path)][0]
     config_name = "config.ini"
     db_name = "test.db"
     initConfig(old_path, init_users, init_extensions, config_name)
