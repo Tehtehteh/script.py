@@ -76,12 +76,4 @@ button.accordion.ac-new:hover,button.accordion.ac-new.active {
 div.my-panel {
     padding: 0 18px;
     background-color: white;
-    display: none;
-    height: 0px;
-    transition-duration: 2s;
-}
-
-div.my-panel.show {
-    display: block;
-    height: auto;
 }
