@@ -37,7 +37,7 @@ function loadFiles(username){
             success: function(files){
                 for (var i =0; i < files.length; i++){
                     var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n"  +  "<td>" + files[i].path +
-                   "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>" + "<td>" + files[i].date + "</td>";
+                   "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>" + "<td>" + new Date(files[i].date) + "</td>";
                     $("#"+files[i].flag).append(str);
                 }}
             });
