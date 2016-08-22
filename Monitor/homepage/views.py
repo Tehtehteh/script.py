@@ -4,16 +4,22 @@ import os
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import FileSerializer, FileFlagSerializer, UsersSerializer
+from django.contrib.auth.decorators import login_required
 
 
 
-#@login_required(login_url='/admin/')
+@login_required(login_url='/admin/')
 def index(request):
     return render(request, "index.html")
 
-#todo show changes in index.html
 
-#todo make accordion file list which depends on flags.
+#todo accept changes with ajax request depending on checkboxes near file name
+
+#
+# @api_view(['POST']):
+# def acceptChanged(request, idn=None):
+#     pass
+
 
 
 @api_view(['GET'])
@@ -47,13 +53,13 @@ def file_flag_collection(request, idn=None):
     fileList = []
     for file in scopeFiles:
         if file.old_hash == '' and file.new_hash !='' and file.flag_exists == 1:
-            fileList.append({'path':file.path, 'flag':'New'})
+            fileList.append({'path':file.path, 'flag':'New', 'date':file.date_checked})
         elif file.new_hash!='' and file.new_hash !=file.old_hash and file.old_hash!="":
-            fileList.append({'path': file.path, 'flag':'Changed'})
+            fileList.append({'path': file.path, 'flag':'Changed', 'date':file.date_checked})
         elif file.flag_exists == 0:
-            fileList.append({'path':file.path, 'flag':'Removed'})
+            fileList.append({'path':file.path, 'flag':'Removed', 'date':file.date_checked})
         elif file.flag_exists == 1 and file.old_hash == file.new_hash or file.old_hash :
-            fileList.append({'path':file.path, 'flag':'Checked'})
+            fileList.append({'path':file.path, 'flag':'Checked', 'date':file.date_checked})
     serializer = FileFlagSerializer(fileList, many=True)
     return Response(serializer.data)
 
@@ -67,7 +73,6 @@ def file_collection(request, idn):
     serializer = FileSerializer(files, many=True)
     return Response(serializer.data)
 
-#todo get request button -> accept changes
 
 
 def usersfiles(request, idn=None):
@@ -86,7 +91,7 @@ def usersfiles(request, idn=None):
     return render(request, "userfiles.html", {'user':idn, 'extensions': ext, 'error':err })
 
 
-#@login_required(login_url='/admin/')
+@login_required(login_url='/admin/')
 def user(request, idn=None):
     err = ''
     file_list = File.objects.filter(name=idn)

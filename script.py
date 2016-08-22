@@ -6,7 +6,7 @@ import time
 from configparser import ConfigParser
 
 
-#------------------- INIT CONFIG IF NOT EXISTS, PASS IF EXISTS ------------#
+#------------------- INIT CONFIG IF NOT EXISTS, ADD IN SECTIONS IF EXISTS ------------#
 def initConfig(path, users, extensions, config_name):
     cfg = ConfigParser()
     if os.path.exists(config_name):
@@ -24,7 +24,7 @@ def initConfig(path, users, extensions, config_name):
     else:
         with open(config_name, "w+", encoding="UTF-8") as f:
             cfg.add_section("MAIN")
-            cfg['MAIN']['Users'] = '\n'.join(list(os.walk(path))[0][1])
+            cfg['MAIN']['Users'] = '\n'.join([x for x in (os.walk(path))][0][1])
             cfg['MAIN']['extensions'] = '\n'.join(extensions)
             cfg['MAIN']['excludes'] = ''
             cfg.write(f)
@@ -36,7 +36,8 @@ def initEverything(config_name):
     cfg.read(config_name)
     users = cfg['MAIN']['Users'].split("\n")
     extensions = cfg['MAIN']['extensions'].split("\n")
-    return users, extensions
+    excludes = cfg['MAIN']['excludes'].split("\n")
+    return users, extensions, excludes
 
 #------------- GET LIST OF USERS DIRECTORIES (STR) --------------------#
 
@@ -119,14 +120,18 @@ def userCreated(user, extensions, cur, path):
                 log.write("Successfully added new user({}) and his files @  ".format(user) +  str(datetime.now().time())+ "\n")
 
 
-#TODO drop existing table Files if Users is excluded
 
 # ----------------- UPDATE DB IN CRON ------------------------#
 
-def updateDBCron(userlist, extensions, path, db_name):
+def updateDBCron(userlist, extensions, excludes, path, db_name):
     with lite.connect(db_name) as con:
         cur = con.cursor()
         try:
+            for exclude in excludes:
+                cur.execute("Delete from Users where name=?",(exclude,))
+                cur.execute("Delete from File whre name=?",(exclude,))
+                with open("success.log", "a+", encoding="utf-8") as log:
+                    log.write("Successfully deleted exclude " + exclude + " in db at " + str(datetime.now().time()) + "\n")
             for user in userlist:
                 if user not in [x[0] for x in cur.execute("Select * from Users").fetchall()]:
                     userCreated(user, extensions, cur, path)
@@ -161,11 +166,11 @@ def main():
     config_name = "config.ini"
     db_name = "test.db"
     initConfig(old_path, init_users, init_extensions, config_name)
-    users, extensions = initEverything(config_name)
+    users, extensions, excludes = initEverything(config_name)
     if (not os.path.exists(db_name)):
         initDBFromScratch(users, extensions, old_path, db_name)
     else:
-        updateDBCron(users, extensions, old_path, db_name)
+        updateDBCron(users, extensions, excludes, old_path, db_name)
 
 if __name__=='__main__':
     main()

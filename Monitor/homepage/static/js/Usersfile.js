@@ -1,4 +1,5 @@
 
+
 $(document).ready(function() {
     loadFiles(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
     loadFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
@@ -8,13 +9,14 @@ var i;
 
 for (i = 0; i < acc.length; i++) {
     acc[i].onclick = function(){
-        this.classList.toggle("active");
         this.nextElementSibling.classList.toggle("show");
     }
 }
 });
 var flags = {'New':"label-info", 'Changed':'label-warning', 'Checked':'label-success', 'Removed':'label-danger'};
 flagcount = {"Changed" : 0, "Removed": 0, "New":0, "Checked" : 0}
+$('.badge-info').popover({ trigger: "hover" });
+$('[data-toggle="popover"]').popover();
 
 function loadFlagFilesCount(username){
     $.ajax({
@@ -36,7 +38,7 @@ function loadFiles(username){
             type: "GET",
             success: function(files){
                 for (var i =0; i < files.length; i++){
-                    var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n"  +  "<td>" + files[i].path +
+                    var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n<td>" + '<input type="radio" aria-label="...">'  + "</td>"+  "<td>" + files[i].path +
                    "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>" + "<td>" + new Date(files[i].date) + "</td>";
                     $("#"+files[i].flag).append(str);
                 }}
