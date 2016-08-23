@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import FileSerializer, FileFlagSerializer, UsersSerializer
 from django.contrib.auth.decorators import login_required
+import json
 
 
 
@@ -15,11 +16,14 @@ def index(request):
 
 #todo accept changes with ajax request depending on checkboxes near file name
 
-#
-# @api_view(['POST']):
-# def acceptChanged(request, idn=None):
-#     pass
 
+@api_view(['POST'])
+def acceptChanges(request, idn=None):
+    fList = File.objects.filter(name=idn).exclude(path__in=json.loads(request.data.get('fileList')))
+    for file in fList:
+        file.old_hash = file.new_hash
+        file.save()
+    return Response(200)
 
 
 @api_view(['GET'])
@@ -46,6 +50,7 @@ def userCollection(request):
                 break
     serializer = UsersSerializer(collection, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def file_flag_collection(request, idn=None):
@@ -87,37 +92,37 @@ def usersfiles(request, idn=None):
     except:
         ext = []
         err = "No files."
-    if (request.POST.get('acceptButton')):
-        print("QEQHEH")
-        print(request.POST.getlist('ignore'))
-        file_list = File.objects.filter(name=idn)
-        for file in file_list:
-            file.old_hash = file.new_hash
-            file.save()
-        File.objects.filter(flag_exists=0, name=idn).delete()
-        return redirect("/new/"+idn)
+    # if (request.POST.get('acceptButton')):
+    #     print("QEQHEH")
+    #     print(request.POST.getlist('ignore'))
+    #     file_list = File.objects.filter(name=idn)
+    #     for file in file_list:
+    #         file.old_hash = file.new_hash
+    #         file.save()
+    #     File.objects.filter(flag_exists=0, name=idn).delete()
+    #     return redirect("/new/"+idn)
     return render(request, "userfiles.html", {'user':idn, 'extensions': ext, 'error':err })
 
-
-@login_required(login_url='/admin/')
-def user(request, idn=None):
-    err = ''
-    file_list = File.objects.filter(name=idn)
-    try:
-        ext = {}
-        for file in file_list:
-            if not ext.get(os.path.splitext(file.path )[1]):
-                ext[os.path.splitext(file.path )[1]] = len(list(filter(lambda x: x.path.endswith(os.path.splitext(file.path )[1]), file_list)))
-    except:
-        ext = []
-        err="No files."
-    if (request.GET.get('acceptButton')):
-        print("DA????")
-        file_list = File.objects.filter(name=idn)
-        for file in file_list:
-            file.old_hash = file.new_hash
-            print("Successfully saved files hash S")
-            file.save()
-        File.objects.filter(flag_exists=0, name=idn).delete()
-        return redirect("/new/"+idn)
-    return render(request, 'user.html', {'user':idn, 'extensions': ext, 'error':err })
+#
+# @login_required(login_url='/admin/')
+# def user(request, idn=None):
+#     err = ''
+#     file_list = File.objects.filter(name=idn)
+#     try:
+#         ext = {}
+#         for file in file_list:
+#             if not ext.get(os.path.splitext(file.path )[1]):
+#                 ext[os.path.splitext(file.path )[1]] = len(list(filter(lambda x: x.path.endswith(os.path.splitext(file.path )[1]), file_list)))
+#     except:
+#         ext = []
+#         err="No files."
+#     if (request.GET.get('acceptButton')):
+#         print("DA????")
+#         file_list = File.objects.filter(name=idn)
+#         for file in file_list:
+#             file.old_hash = file.new_hash
+#             print("Successfully saved files hash S")
+#             file.save()
+#         File.objects.filter(flag_exists=0, name=idn).delete()
+#         return redirect("/new/"+idn)
+#     return render(request, 'user.html', {'user':idn, 'extensions': ext, 'error':err })
