@@ -32,7 +32,8 @@ ALLOWED_HOSTS = []
 
 REST_FRAMEWORK = {
     #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'PAGE_SIZE': 10
+    'DEFAULT_PERMISSION_CLASSES':('rest_framework.permissions.AllowAny',),
+    #'PAGE_SIZE': 10,
 }
 
 INSTALLED_APPS = [
