@@ -85,9 +85,17 @@ def usersfiles(request, idn=None):
                 ext[os.path.splitext(file.path)[1]] = len(
                     list(filter(lambda x: x.path.endswith(os.path.splitext(file.path)[1]), file_list)))
     except:
-        file_list = []
         ext = []
         err = "No files."
+    if (request.POST.get('acceptButton')):
+        print("QEQHEH")
+        print(request.POST.getlist('ignore'))
+        file_list = File.objects.filter(name=idn)
+        for file in file_list:
+            file.old_hash = file.new_hash
+            file.save()
+        File.objects.filter(flag_exists=0, name=idn).delete()
+        return redirect("/new/"+idn)
     return render(request, "userfiles.html", {'user':idn, 'extensions': ext, 'error':err })
 
 
@@ -101,14 +109,15 @@ def user(request, idn=None):
             if not ext.get(os.path.splitext(file.path )[1]):
                 ext[os.path.splitext(file.path )[1]] = len(list(filter(lambda x: x.path.endswith(os.path.splitext(file.path )[1]), file_list)))
     except:
-        file_list = []
         ext = []
         err="No files."
     if (request.GET.get('acceptButton')):
+        print("DA????")
         file_list = File.objects.filter(name=idn)
         for file in file_list:
             file.old_hash = file.new_hash
+            print("Successfully saved files hash S")
             file.save()
         File.objects.filter(flag_exists=0, name=idn).delete()
-        return redirect("/"+idn)
+        return redirect("/new/"+idn)
     return render(request, 'user.html', {'user':idn, 'extensions': ext, 'error':err })

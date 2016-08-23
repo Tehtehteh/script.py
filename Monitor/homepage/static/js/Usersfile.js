@@ -38,7 +38,7 @@ function loadFiles(username){
             type: "GET",
             success: function(files){
                 for (var i =0; i < files.length; i++){
-                    var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n<td>" + '<input type="radio" aria-label="...">'  + "</td>"+  "<td>" + files[i].path +
+                    var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n<td>" + '<form action="#" method="post"><input type="checkbox" name="ignore"  value="'+files[i].path+'"></form>' + "</td>"+  "<td>" + files[i].path +
                    "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>" + "<td>" + new Date(files[i].date) + "</td>";
                     $("#"+files[i].flag).append(str);
                 }}
@@ -51,7 +51,7 @@ function loadFilesCount(username){
         type: "GET",
         success: function(users){
             for (let i = 0; i<users.length; i++){
-                if (users[i].name == username){
+                if (users[i].name == username.split("#")[0]){
                     $(".my-badge").append(users[i].count);
                     break;
                 }

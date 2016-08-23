@@ -34,7 +34,8 @@
                             {% endif %}
                         </ul>
                     </div>
-                    <form action="#" method="get">
+                    <form action="#" method="post">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                         <button class="btn btn-primary " name="acceptButton" value="accept" style="float: right; margin-right: 20px;" >Принять изменения</button>
                     </form>
                 </div>
