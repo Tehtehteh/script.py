@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="{{ static('js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ static('js/Usersfile.js') }}"></script>
+    <script src="https://use.fontawesome.com/525d12f3f5.js"></script>
     <title>Title</title>
 </head>
 <body>
@@ -24,7 +25,10 @@
                             {% if not error|length %}
                           <li class="list-group-item">
                             Всего файлов
-                            <span class="badge my-badge"></span>
+                              <span style="float: right">
+                                <span class="badge my-badge badge-count"></span>
+                                 <em class="fa fa-refresh refresh"></em>
+                              </span>
                           </li>
                             {% for extension in extensions %}
                             <li class="list-group-item">Файлов с расширением {{ extension }}
@@ -34,10 +38,8 @@
                             {% endif %}
                         </ul>
                     </div>
-                    <form action="#" method="post">
-                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                        <button class="btn btn-primary " name="acceptButton" value="accept" style="float: right; margin-right: 20px;" >Принять изменения</button>
-                    </form>
+                        <input type="hidden" name="csrfmiddlewaretoken">
+                        <button class="btn btn-primary " name="acceptButton" value="accept" style="float: right; margin-right: 20px;" onclick="acceptChanges(window.location.toString().split('/')[window.location.toString().split('/').length-1], '{{ csrf_token }}')">Принять изменения</button>
                 </div>
             </div>
             <div class="panel-footer">
@@ -45,7 +47,11 @@
             </div>
     </div>
     <div class="panel panel-default">
-        <button class="accordion ac-check"><span class="badge badge-Checked"></span>Checked</button>
+        <button class="accordion ac-check">
+                    <span class="badge my-badge badge-Checked"> </span>
+                    <em class="fa fa-refresh refresh"></em>
+                Checked
+            </button>
             <div class="my-panel">
                 <table class="table table-striped">
                     <thead>
@@ -63,7 +69,11 @@
                     </thead>
                 </table>
             </div>
-            <button class="accordion ac-remov"><span class="badge badge-Removed"></span>Removed</button>
+            <button class="accordion ac-remov">
+                    <span class="badge my-badge badge-Removed"> </span>
+                    <em class="fa fa-refresh refresh"></em>
+                Removed
+            </button>
             <div class="my-panel">
                 <table class="table table-striped">
                     <thead>
@@ -81,7 +91,11 @@
                     </thead>
                 </table>
             </div>
-            <button class="accordion ac-changed"><span class="badge badge-Changed"></span>Changed</button>
+            <button class="accordion ac-changed">
+                    <span class="badge my-badge badge-Changed"> </span>
+                    <em class="fa fa-refresh refresh"></em>
+                Changed
+            </button>
             <div class="my-panel">
                 <table class="table table-striped">
                     <thead>
@@ -99,7 +113,11 @@
                     </thead>
                 </table>
             </div>
-            <button class="accordion ac-new"><span class="badge badge-New"> </span>New</button>
+            <button class="accordion ac-new">
+                    <span class="badge my-badge badge-New"> </span>
+                    <em class="fa fa-refresh refresh"></em>
+                New
+            </button>
             <div class="my-panel">
                 <table class="table table-striped">
                     <thead>
