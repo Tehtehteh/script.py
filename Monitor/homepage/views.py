@@ -17,7 +17,9 @@ def index(request):
 @api_view(['POST'])
 def acceptChanges(request, idn=None):
     fList = File.objects.filter(name=idn).exclude(path__in=json.loads(request.data.get('fileList')))
-    isolateFileList = File.objects.filter(name=idn).exclude(path__in=json.loads(request.data.get('isolate')))
+    isolateFileList = []
+    if len(json.loads(request.data.get('isolate')))!=0:
+        isolateFileList = File.objects.filter(path__in=json.loads(request.data.get('isolate')))
     for file in fList:
         file.old_hash = file.new_hash
         file.save()
