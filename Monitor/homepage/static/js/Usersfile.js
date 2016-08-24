@@ -1,20 +1,17 @@
-
-
 $(document).ready(function() {
     loadFiles(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
     loadFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
     loadFlagFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
     var acc = document.getElementsByClassName("accordion");
-var i;
 
-for (i = 0; i < acc.length; i++) {
+for (let i = 0; i < acc.length; i++) {
     acc[i].onclick = function(){
         this.nextElementSibling.classList.toggle("show");
     }
 }
 });
 var flags = {'New':"label-info", 'Changed':'label-warning', 'Checked':'label-success', 'Removed':'label-danger'};
-flagcount = {"Changed" : 0, "Removed": 0, "New":0, "Checked" : 0}
+var flagcount = {"Changed" : 0, "Removed": 0, "New":0, "Checked" : 0};
 $('.badge-info').popover({ trigger: "hover" });
 $('[data-toggle="popover"]').popover();
 
@@ -26,10 +23,54 @@ function loadFlagFilesCount(username){
             for (let i = 0; i < files.length; i ++){
             flagcount[files[i].flag] ++ ;}
             for (x in flagcount){
-                $(".badge-"+x).append(flagcount[x]);}
-        }
+                $(".badge-"+x).text(flagcount[x]);}
+            flagcount = {"Changed" : 0, "Removed": 0, "New":0, "Checked" : 0};
+        },
+
     })
 
+}
+function sendRequestForChanges (username, fileList, csrf_token, callback) {
+        setTimeout(function() {
+            $.ajax({
+                url: '/api/accept/' + username,
+                dataType: 'json',
+                data: {'fileList':JSON.stringify(fileList, null, ' '),
+                        csrfmiddlewaretoken: csrf_token},
+                type: "POST",
+                success:function(data){
+                    if (callback) callback(null, data);
+                },
+                error: function(status, err){
+                    if (callback) callback(err);
+                }
+            });
+        }, 2000);
+    }
+
+var refresh = 'fa fa-refresh refresh';
+var stopEvents = false;
+function acceptChanges(username, csrf_token){
+    var fileList = []
+    var boxes = $(":checkbox");
+    for (let i = 0; i < boxes.length; i++) {
+        if ($(boxes[i]).prop('checked')) {
+        fileList.push(boxes[i].value)
+        }}
+    if (!stopEvents) {
+        stopEvents = true;
+        $(".my-badge").addClass("hidden");
+        $(".fa").removeClass("hidden");
+        sendRequestForChanges(username, fileList, csrf_token, function(err, data) {
+            for(x in flags){
+                $("#"+x).empty();
+            }
+            loadFlagFilesCount(username);
+            loadFiles(username);
+            loadFilesCount(username);
+            stopEvents = false;
+        });
+    }
 }
 
 function loadFiles(username){
@@ -38,7 +79,7 @@ function loadFiles(username){
             type: "GET",
             success: function(files){
                 for (var i =0; i < files.length; i++){
-                    var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n<td>" + '<form action="#" method="post"><input type="checkbox" name="ignore"  value="'+files[i].path+'"></form>' + "</td>"+  "<td>" + files[i].path +
+                    var str = "<tr>\n<th scope='row'>"+(i+1)+"</th>\n<td>" + '<input type="checkbox" name="ignore"  value="'+files[i].path+'">' + "</td>"+  "<td>" + files[i].path +
                    "</td>\n<td>" + files[i].path.split(".")[files[i].path.split(".").length-1] + "</td>" + "<td>" + new Date(files[i].date) + "</td>";
                     $("#"+files[i].flag).append(str);
                 }}
@@ -46,16 +87,20 @@ function loadFiles(username){
     }
 
 function loadFilesCount(username){
+    $('.my-badge').text('').addClass('hidden');
+    $(".fa").removeClass('hidden');
     $.ajax({
         url: "/api/userlist",
         type: "GET",
         success: function(users){
             for (let i = 0; i<users.length; i++){
                 if (users[i].name == username.split("#")[0]){
-                    $(".my-badge").append(users[i].count);
+                    $(".badge-count").text(users[i].count);
                     break;
                 }
             }
+            $(".fa").addClass('hidden');
+            $('.my-badge').removeClass('hidden');
         }
     })
 }
