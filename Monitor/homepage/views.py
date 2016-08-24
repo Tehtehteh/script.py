@@ -14,14 +14,15 @@ def index(request):
     return render(request, "index.html")
 
 
-#todo accept changes with ajax request depending on checkboxes near file name
-
-
 @api_view(['POST'])
 def acceptChanges(request, idn=None):
     fList = File.objects.filter(name=idn).exclude(path__in=json.loads(request.data.get('fileList')))
+    isolateFileList = File.objects.filter(name=idn).exclude(path__in=json.loads(request.data.get('isolate')))
     for file in fList:
         file.old_hash = file.new_hash
+        file.save()
+    for file in isolateFileList:
+        file.old_hash = ""
         file.save()
     return Response(200)
 
@@ -32,8 +33,8 @@ def userCollection(request):
     userList = Users.objects.all()
     for user in userList:
         scopeFiles = File.objects.filter(name=user.name)
-        for file in scopeFiles:
-            if file.old_hash == '' and file.new_hash != '' and file.flag_exists == 1:
+        for i, file in enumerate(scopeFiles):
+            if not file.old_hash  and file.new_hash  and file.flag_exists == 1:
                 collection.append({'name': user.name, 'count': len(File.objects.filter(name=user.name)),'Changed': True})
                 break
             elif file.new_hash != '' and file.new_hash != file.old_hash and file.old_hash != "":
@@ -44,10 +45,9 @@ def userCollection(request):
                 collection.append(
                     {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': True})
                 break
-            else:
+            elif i == len(scopeFiles)-1:
                 collection.append(
                     {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': False})
-                break
     serializer = UsersSerializer(collection, many=True)
     return Response(serializer.data)
 
