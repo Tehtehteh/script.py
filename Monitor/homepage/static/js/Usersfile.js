@@ -30,13 +30,15 @@ function loadFlagFilesCount(username){
     })
 
 }
-function sendRequestForChanges (username, fileList, csrf_token, callback) {
+function sendRequestForChanges (username, fileList, isolateList, csrf_token, callback) {
         setTimeout(function() {
             $.ajax({
                 url: '/api/accept/' + username,
                 dataType: 'json',
                 data: {'fileList':JSON.stringify(fileList, null, ' '),
-                        csrfmiddlewaretoken: csrf_token},
+                        csrfmiddlewaretoken: csrf_token,
+                        'isolate':JSON.stringify(isolateList, null, ' ')
+                        },
                 type: "POST",
                 success:function(data){
                     if (callback) callback(null, data);
@@ -51,17 +53,25 @@ function sendRequestForChanges (username, fileList, csrf_token, callback) {
 var refresh = 'fa fa-refresh refresh';
 var stopEvents = false;
 function acceptChanges(username, csrf_token){
-    var fileList = []
+    var fileList = [];
+    var isolateList = [];
     var boxes = $(":checkbox");
     for (let i = 0; i < boxes.length; i++) {
         if ($(boxes[i]).prop('checked')) {
         fileList.push(boxes[i].value)
         }}
+    var QuarList = $("#Checked input:checkbox");
+    for (let i = 0; i<QuarList.length; i++){
+        if ($(QuarList[i]).prop("checked")){
+            isolateList.push(QuarList[i].value);
+        }
+    }
+    console.log(isolateList);
     if (!stopEvents) {
         stopEvents = true;
         $(".my-badge").addClass("hidden");
         $(".fa").removeClass("hidden");
-        sendRequestForChanges(username, fileList, csrf_token, function(err, data) {
+        sendRequestForChanges(username, fileList, isolateList, csrf_token, function(err, data) {
             for(x in flags){
                 $("#"+x).empty();
             }
