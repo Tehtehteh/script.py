@@ -1,15 +1,13 @@
 $(document).ready(function() {
-    loadFiles(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
-    loadFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
-    loadFlagFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
-    var acc = document.getElementsByClassName("accordion");
-
-for (let i = 0; i < acc.length; i++) {
-    acc[i].onclick = function(){
-        this.nextElementSibling.classList.toggle("show");
-    }
-}
+  loadFiles(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
+  loadFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
+  loadFlagFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
+  
+  $('.accordion').click(function(){
+    $(this).toggleClass('active').next().slideToggle('fast');
+  }).next().hide();
 });
+
 var flags = {'New':"label-info", 'Changed':'label-warning', 'Checked':'label-success', 'Removed':'label-danger'};
 var flagcount = {"Changed" : 0, "Removed": 0, "New":0, "Checked" : 0};
 $('.badge-info').popover({ trigger: "hover" });
