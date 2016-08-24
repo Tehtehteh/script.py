@@ -129,7 +129,7 @@ def updateDBCron(userlist, extensions, excludes, path, db_name):
         try:
             for exclude in excludes:
                 cur.execute("Delete from Users where name=?",(exclude,))
-                cur.execute("Delete from File whre name=?",(exclude,))
+                cur.execute("Delete from File where name=?",(exclude,))
                 with open("success.log", "a+", encoding="utf-8") as log:
                     log.write("Successfully deleted exclude " + exclude + " in db at " + str(datetime.now().time()) + "\n")
             for user in userlist:
@@ -164,7 +164,7 @@ def main():
     init_extensions = (".php", ".js", ".html", ".css")
     init_users = [x for x in initUsers(old_path)][0]
     config_name = "config.ini"
-    db_name = "test.db"
+    db_name = "Monitor/test.db"
     initConfig(old_path, init_users, init_extensions, config_name)
     users, extensions, excludes = initEverything(config_name)
     if (not os.path.exists(db_name)):

@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 	<link rel="stylesheet" href="{{ static('css/bootstrap.min.css') }}" type = "text/css"/>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="{{ static('js/Users.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js" defer></script>
+    <script src="https://use.fontawesome.com/525d12f3f5.js"></script>
+    <script type="text/javascript" src="{{ static('js/Users.js') }}" defer></script>
+    <link rel="stylesheet" href = "{{ static ('css/my.css')}}" type="text/css"/>
     <meta charset="UTF-8">
     <title>Such monitor</title>
 </head>
@@ -11,7 +13,7 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <h2><p>MONITORING system БЕТА</p></h2>
+          <h2><span>MONITORING system БЕТА  <em class="fa fa-refresh refresh"></em></span></h2>
         </div>
       </div>
     </nav>
