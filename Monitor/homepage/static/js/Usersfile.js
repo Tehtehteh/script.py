@@ -66,7 +66,6 @@ function acceptChanges(username, csrf_token){
             isolateList.push(QuarList[i].value);
         }
     }
-    console.log(isolateList);
     if (!stopEvents) {
         stopEvents = true;
         $(".my-badge").addClass("hidden");
