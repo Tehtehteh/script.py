@@ -96,12 +96,21 @@ div.my-panel {
 .badge-New.refresh{
     margin-right: 19px;
 }
-.jumbotron p,h1{
+.panel-default p,h1{
     text-align: center;
     font-family: 'Ubuntu Condensed', sans-serif;
-    /*font-family: 'Josefin Sans', sans-serif;*/
     padding-top: 20px;
-    opacity: 0.6;
+    opacity: 0.65;
+}
+
+thead th{
+    text-align: center;
+}
+
+tbody td{
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 2px;
 }
 
 .badge-Changed.refresh{
