@@ -3,6 +3,8 @@ import sqlite3 as lite
 from hashlib import md5
 from datetime import datetime
 import time
+import argparse
+import sys
 from configparser import ConfigParser
 
 
@@ -159,18 +161,24 @@ def updateDBCron(userlist, extensions, excludes, path, db_name):
 
 #----------------- MAIN FUNC -------------------------------#
 def main():
-    new_path = "/var/www/"
-    old_path = "/home/user6/userstest/"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("path", help="Top directory for user's directories to check files in")
+    args = parser.parse_args()
+    path = args.path
     init_extensions = (".php", ".js", ".html", ".css")
-    init_users = [x for x in initUsers(old_path)][0]
+    try:
+        init_users = [x[1] for x in os.walk(path)][0]
+    except Exception as e:
+        print('Error encountered: ',e, file=sys.stderr)
+        return
     config_name = "config.ini"
     db_name = "Monitor/test.db"
-    initConfig(old_path, init_users, init_extensions, config_name)
+    initConfig(path, init_users, init_extensions, config_name)
     users, extensions, excludes = initEverything(config_name)
     if (not os.path.exists(db_name)):
-        initDBFromScratch(users, extensions, old_path, db_name)
+        initDBFromScratch(users, extensions, path, db_name)
     else:
-        updateDBCron(users, extensions, excludes, old_path, db_name)
+        updateDBCron(users, extensions, excludes, path, db_name)
 
 if __name__=='__main__':
     main()

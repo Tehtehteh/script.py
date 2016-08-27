@@ -2,12 +2,7 @@
 db.*
 
 __pycache__
-.idea/inspectionProfiles/profiles_settings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/script.py.iml
-.idea/workspace.xml
+.idea
 Added_REST_api_view_.patch
 Monitor/homepage/migrations/0001_initial.py
-Monitor/homepage/static/fonts/
 Monitor/sqlite3.exe
