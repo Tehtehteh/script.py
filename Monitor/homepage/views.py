@@ -13,6 +13,10 @@ import json
 def index(request):
     return render(request, "index.html")
 
+@login_required(login_url='/admin')
+def newUsersTable(request):
+    return render(request, "new_index.html")
+
 
 @api_view(['POST'])
 def acceptChanges(request, idn=None):
