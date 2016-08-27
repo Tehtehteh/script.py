@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="{{ static('css/bootstrap.min.css') }}" type = "text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.10.2.js" defer></script>
+    <script src="https://use.fontawesome.com/525d12f3f5.js"></script>
+    <script type="text/javascript" src="{{ static('js/table.js') }}" defer></script>
+    <link rel="stylesheet" href = "{{ static ('css/table.css')}}" type="text/css"/>
+    <meta charset="UTF-8">
+    <title>Such monitor</title>
+</head>
+<body>
+    <div class="container container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p>Система мониторинга файлов пользователей.</p>
+            </div>
+            <div class="panel-body">
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-warning btn-filter" data-target="changed">Есть изменения</button>
+                        <button type="button" class="btn btn-success btn-filter" data-target="checked">Всё проверено</button>
+                        <button type="button" class="btn btn-info btn-filter" data-target="all">Все пользователи</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                   <table class="table table-filter">
+                       <thead>
+                           <th>#</th>
+                           <th>Данные о пользователе</th>
+                       </thead>
+                       <tbody id="users-table">
+                       </tbody>
+                   </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
