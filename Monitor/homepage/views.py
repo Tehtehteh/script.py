@@ -16,18 +16,16 @@ def index(request):
 
 @api_view(['POST'])
 def acceptChanges(request, idn=None):
-    fList = File.objects.filter(name=idn).exclude(path__in=json.loads(request.data.get('fileList')))
-    print("LENGTH OF FILE LIST IS: ", len(fList))
+    flList = json.loads(request.data.get('fileList'))
+    isoList = json.loads(request.data.get('isolate'))
+    fList = File.objects.filter(name=idn).exclude(path__in=flList)
     isolateFileList = []
-    if len(json.loads(request.data.get('isolate')))!=0:
-        isolateFileList = File.objects.filter(path__in=json.loads(request.data.get('isolate')))
-    print("LENGTH OF ISOLATE FILE LIST IS: ", len(isolateFileList))
+    if len(isoList)!=0:
+        isolateFileList = File.objects.filter(path__in=isoList)
+    File.objects.filter(path__in=fList, flag_exists=0).delete()
     for file in fList:
-        if file.flag_exists == 0:
-            File.objects.filter(path=file.path).delete()
-        else:
-            file.old_hash = file.new_hash
-            file.save()
+        file.old_hash = file.new_hash
+        file.save()
     for file in isolateFileList:
         file.old_hash = ""
         file.save()
@@ -40,22 +38,25 @@ def userCollection(request):
     userList = Users.objects.all()
     for user in userList:
         scopeFiles = File.objects.filter(name=user.name)
-        for i, file in enumerate(scopeFiles):
-            if not file.old_hash  and file.new_hash  and file.flag_exists == 1:
-                collection.append({'name': user.name, 'count': len(File.objects.filter(name=user.name)),'Changed': True})
-                break
-            elif file.new_hash != '' and file.new_hash != file.old_hash and file.old_hash != "":
-                collection.append(
-                    {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': True})
-                break
-            elif file.flag_exists == 0:
-                collection.append(
-                    {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': True})
-                break
-            elif i == len(scopeFiles)-1:
-                collection.append(
-                    {'name': user.name, 'count': len(File.objects.filter(name=user.name)), 'Changed': False})
-    serializer = UsersSerializer(collection, many=True)
+        if len(scopeFiles):
+            for i, file in enumerate(scopeFiles):
+                if not file.old_hash  and file.new_hash  and file.flag_exists == 1:
+                    collection.append({'name': user.name, 'count': len(scopeFiles),'Changed': True})
+                    break
+                elif file.new_hash != '' and file.new_hash != file.old_hash and file.old_hash != "":
+                    collection.append(
+                        {'name': user.name, 'count': len(scopeFiles), 'Changed': True})
+                    break
+                elif file.flag_exists == 0:
+                    collection.append(
+                        {'name': user.name, 'count': len(scopeFiles), 'Changed': True})
+                    break
+                elif i == len(scopeFiles)-1:
+                    collection.append(
+                        {'name': user.name, 'count': len(scopeFiles), 'Changed': False})
+        else:
+            collection.append({'name':user.name, 'count':0, 'Changed':False})
+        serializer = UsersSerializer(collection, many=True)
     return Response(serializer.data)
 
 
@@ -90,24 +91,15 @@ def file_collection(request, idn):
 def usersfiles(request, idn=None):
     err = ''
     file_list = File.objects.filter(name=idn)
-    try:
-        ext = {}
+    ext = {}
+    if len(file_list):
         for file in file_list:
             if not ext.get(os.path.splitext(file.path)[1]):
                 ext[os.path.splitext(file.path)[1]] = len(
                     list(filter(lambda x: x.path.endswith(os.path.splitext(file.path)[1]), file_list)))
-    except:
+    else:
         ext = []
         err = "No files."
-    # if (request.POST.get('acceptButton')):
-    #     print("QEQHEH")
-    #     print(request.POST.getlist('ignore'))
-    #     file_list = File.objects.filter(name=idn)
-    #     for file in file_list:
-    #         file.old_hash = file.new_hash
-    #         file.save()
-    #     File.objects.filter(flag_exists=0, name=idn).delete()
-    #     return redirect("/new/"+idn)
     return render(request, "userfiles.html", {'user':idn, 'extensions': ext, 'error':err })
 
 #
