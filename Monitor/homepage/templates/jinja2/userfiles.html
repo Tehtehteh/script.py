@@ -12,41 +12,41 @@
     <title>Title</title>
 </head>
 <body>
-    <div class="panel panel-default">
-            <div class="panel-heading">
-                <button class="btn btn-default" onclick="return location.href='/'">
-                    <div class="arrow-left"></div>
-                </button>
-                <span>Статистика файлов <strong> {{user}}</strong></span>
-            </div>
-            <div class="panel-body">
-                <div class="row my-row">
-                    <div class="col-sm-3">
-                        <ul class="list-group">
-                            {% if not error|length %}
-                          <li class="list-group-item">
-                            Всего файлов
-                              <span style="float: right">
-                                <span class="badge my-badge badge-count"></span>
-                                 <em class="fa fa-refresh refresh"></em>
-                              </span>
-                          </li>
-                            {% for extension in extensions %}
-                            <li class="list-group-item">Файлов с расширением {{ extension }}
-                            <span class="badge">{{ extensions[extension] }}</span>
-                            </li>
-                            {% endfor %}
-                            {% endif %}
-                        </ul>
-                    </div>
-                        <input type="hidden" name="csrfmiddlewaretoken">
-                        <button class="btn btn-primary " name="acceptButton" value="accept" style="float: right; margin-right: 20px; {% if error %} display:none; {%endif%}" onclick="acceptChanges(window.location.toString().split('/')[window.location.toString().split('/').length-1], '{{ csrf_token }}')">Принять изменения</button>
+    <div class="container container-fluid">
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button class="btn btn-default" onclick="return location.href='/'">
+                        <div class="arrow-left"></div>
+                    </button>
+                    <span>Статистика файлов <strong> {{user}}</strong></span>
                 </div>
-            </div>
-            <div class="panel-footer">
-                <p>Tehtehtehteh</p>
-            </div>
+                <div class="panel-body">
+                    <div class="row my-row">
+                        <div class="col-sm-3">
+                            <ul class="list-group">
+                                {% if not error|length %}
+                              <li class="list-group-item">
+                                Всего файлов
+                                  <span style="float: right">
+                                    <span class="badge my-badge badge-count"></span>
+                                     <em class="fa fa-refresh refresh"></em>
+                                  </span>
+                              </li>
+                                {% for extension in extensions %}
+                                <li class="list-group-item">Файлов с расширением {{ extension }}
+                                <span class="badge">{{ extensions[extension] }}</span>
+                                </li>
+                                {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                            <input type="hidden" name="csrfmiddlewaretoken">
+                            <button class="btn btn-primary " name="acceptButton" value="accept" style="float: right; margin-right: 20px; {% if error %} display:none; {%endif%}" onclick="acceptChanges(window.location.toString().split('/')[window.location.toString().split('/').length-1], '{{ csrf_token }}')">Принять изменения</button>
+                    </div>
+                </div>
+        </div>
     </div>
+    <div class="container container-fluid">
     {% if not error %}
     <div class="panel panel-default">
         <button class="accordion ac-check">
@@ -60,11 +60,11 @@
                         <tr>
                           <th>#</th>
                           <th>
-                              Отправить в карантин
+                              В карантин
                           </th>
                           <th>Путь к файлу</th>
                           <th>Расширение</th>
-                          <th>Дата изменения флага</th>
+                          <th>Дата</th>
                         </tr>
                         <tbody id = "Checked">
                         </tbody>
@@ -86,7 +86,7 @@
                           </th>
                           <th>Путь к файлу</th>
                           <th>Расширение</th>
-                          <th>Дата изменения флага</th>
+                          <th>Дата</th>
                         </tr>
                         <tbody id = "Removed">
                         </tbody>
@@ -108,7 +108,7 @@
                           </th>
                           <th>Путь к файлу</th>
                           <th>Расширение</th>
-                          <th>Дата изменения флага</th>
+                          <th>Дата</th>
                         </tr>
                         <tbody id = "Changed">
                         </tbody>
@@ -130,7 +130,7 @@
                           </th>
                           <th>Путь к файлу</th>
                           <th>Расширение</th>
-                          <th>Дата изменения флага</th>
+                          <th>Дата</th>
                         </tr>
                         <tbody id = "New">
                         </tbody>
@@ -139,10 +139,12 @@
             </div>
     </div>
     {% else %}
-        <div class="jumbotron">
-            <h1>У пользователя <strong>{{user}}</strong> нету файлов :(</h1>
-            <p>Возможно, стоит вернуться на <a href="/">главную?</a></p>
+            <div class="panel panel-default">
+                <h1>У пользователя <strong>{{user}}</strong> нету файлов :(</h1>
+                <p>Возможно, стоит вернуться на <a href="/">главную?</a></p>
+            </div>
         </div>
     {% endif %}
+    </div>
 </body>
 </html>
