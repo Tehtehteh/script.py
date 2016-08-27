@@ -11,6 +11,7 @@ $(document).ready(function () {
     });
  });
  function getUserList(){
+    $("#users-table").addClass("hidden");
     $.ajax({
         url: "/api/userlist",
         type: "GET",
@@ -33,6 +34,8 @@ $(document).ready(function () {
                 </tr>
                 `;
                 str = str.format(userList[i].Changed?'changed':'checked',(i+1),('/new/' + userList[i].name), userList[i].name, userList[i].count);
+                $(".fa").addClass('hidden');
+                $('#users-table').removeClass('hidden');
                 $("#users-table").append(str);
             }
         }
