@@ -105,7 +105,12 @@ div.my-panel.show {
 .badge-New.refresh{
     margin-right: 19px;
 }
-
+.jumbotron p,h1{
+    font-family: 'Ubuntu Condensed', sans-serif;
+    /*font-family: 'Josefin Sans', sans-serif;*/
+    padding-top: 20px;
+    opacity: 0.6;
+}
 
 .badge-Changed.refresh{
     margin-right: 19px;
