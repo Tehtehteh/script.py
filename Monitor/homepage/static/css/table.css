@@ -102,20 +102,7 @@ body {
 	font-family: 'Glyphicons Halflings';
 	position: absolute;
 }
-.table-filter .star {
-	color: #ccc;
-	text-align: center;
-	display: block;
-}
-.table-filter .star.star-checked {
-	color: #F0AD4E;
-}
-.table-filter .star:hover {
-	color: #ccc;
-}
-.table-filter .star.star-checked:hover {
-	color: #F0AD4E;
-}
+
 .table-filter .media-photo {
 	width: 35px;
 }
@@ -137,10 +124,10 @@ body {
 	font-size: .8em;
 	margin-right: 20px;
 }
-.table-filter .media .title span.pagado {
+.table-filter .media .title span.checked {
 	color: #5cb85c;
 }
-.table-filter .media .title span.pendiente {
+.table-filter .media .title span.changed {
 	color: #f0ad4e;
 }
 .table-filter .media .title span.cancelado {

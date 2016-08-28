@@ -19,21 +19,19 @@ $(document).ready(function () {
             for(let i = 0; i < userList.length; i++){
                 var str = `
                 <tr data-status='{0}'>
-                    <td>
-                      {1}
-                    </td>
+                    <td>{1}</td>
                     <td>
                       <div class='media'>
                         <a href="{2}" class="pull-left">
                           <img src='static/img/user.png' class='media-photo'></img>
                         </a>
-                        <h4 class="title">
-                          {3}
+                        <h4 class="title">{3}
+                          <span class="pull-right {4}">{5}</span>
                         </h4>
-                    <p class="summary">У этого пользователя {4} файлов.</p>
+                    <p class="summary">У этого пользователя {6} файлов.</p>
                 </tr>
                 `;
-                str = str.format(userList[i].Changed?'changed':'checked',(i+1),('/new/' + userList[i].name), userList[i].name, userList[i].count);
+                str = str.format(userList[i].Changed?'changed':'checked',(i+1),('/new/' + userList[i].name), userList[i].name, userList[i].Changed?'changed':'checked', userList[i].Changed?'changed':'checked', userList[i].count);
                 $(".fa").addClass('hidden');
                 $('#users-table').removeClass('hidden');
                 $("#users-table").append(str);
