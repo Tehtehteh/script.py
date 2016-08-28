@@ -12,7 +12,7 @@
 Или:
 
 ```python
-script/py /var/www
+python script.py /var/www
 ```
 
 Первым аргументом является путь к top директории с пользователями.
