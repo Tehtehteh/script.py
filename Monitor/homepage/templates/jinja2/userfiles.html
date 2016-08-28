@@ -150,10 +150,13 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h1>У пользователя <strong>{{user}}</strong> нету файлов :(</h1>
-                    <p>Возможно, стоит вернуться на <a href="/">главную?</a>...<br>Или почитать цитатку? Ы</p>
+                    <p>Возможно, стоит вернуться на <a href="/">главную?</a>...<br>Или почитать цитатку? <a href="#" onclick="getQuote()">Ы</a>
+                        <em class="fa fa-refresh refresh"></em>
+                    </p>
                     <div class="row my-row">
-                        <div class="col md-5 center">
-                        {{ quote|regex_replace('(<\/br>)+<', '<br><')|safe }}
+                        <div class="col md-5 center quote">
+                            <div class="text">
+                            </div>
                         </div>
                     </div>
                 </div>

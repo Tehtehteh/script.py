@@ -19,4 +19,4 @@ def getQuote(url):
 def main():
     url = rollPage()
     quote = getQuote(url)
-    return url, quote
+    return url, quote.getText(separator='\n')

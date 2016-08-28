@@ -2,7 +2,7 @@ $(document).ready(function(){
   loadFiles(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
   loadFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
   loadFlagFilesCount(window.location.toString().split("/")[window.location.toString().split("/").length-1]);
-  
+  getQuote();
   $('.accordion').click(function(){
     $(this).toggleClass('active').next().slideToggle('fast');
   }).next().hide();
@@ -75,6 +75,22 @@ function acceptChanges(username, csrf_token){
       stopEvents = false;
     });
   }
+}
+$.fn.multiline = function(text){
+    this.text(text);
+    this.html(this.html().replace(/\n/g,'<br/>'));
+    return this;
+}
+function getQuote(){
+    $('.fa').removeClass('hidden');
+    $.ajax({
+        url: '/api/getquote',
+        type: 'GET',
+        success: function(quote){
+            $('.fa').addClass('hidden');
+            $('.text').multiline(quote.quote)
+        }
+    })
 }
 
 function loadFiles(username){
