@@ -1,5 +1,6 @@
 *.db
 db.*
+*.bakk
 
 __pycache__
 .idea
