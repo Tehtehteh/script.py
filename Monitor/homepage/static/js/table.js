@@ -31,7 +31,7 @@ $(document).ready(function () {
                     <p class="summary">У этого пользователя {6} файлов.</p>
                 </tr>
                 `;
-                str = str.format(userList[i].Changed?'changed':'checked',(i+1),('/new/' + userList[i].name), userList[i].name, userList[i].Changed?'changed':'checked', userList[i].Changed?'changed':'checked', userList[i].count);
+                str = str.format(userList[i].Changed?'changed':'checked',(i+1),('/new/' + userList[i].name), userList[i].name, userList[i].Changed?'changed':'checked', userList[i].Changed?'Есть изменения':'Нету изменений', userList[i].count);
                 $(".fa").addClass('hidden');
                 $('#users-table').removeClass('hidden');
                 $("#users-table").append(str);
