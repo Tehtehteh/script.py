@@ -3,9 +3,10 @@ from .models import File, Users
 import os
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import FileSerializer, FileFlagSerializer, UsersSerializer
+from .serializers import FileSerializer, FileFlagSerializer, UsersSerializer, quoteSerializer
 from django.contrib.auth.decorators import login_required
 import json
+from . import bash
 
 
 
@@ -16,6 +17,15 @@ def index(request):
 @login_required(login_url='/admin')
 def newUsersTable(request):
     return render(request, "new_index.html")
+
+@api_view(['GET'])
+def getBashQuote(request):
+    data = {}
+    url, quote = bash.main()
+    data['url'] = url
+    data['quote'] = quote
+    serializer = quoteSerializer(data)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
@@ -81,9 +91,6 @@ def file_flag_collection(request, idn=None):
     return Response(serializer.data)
 
 
-
-
-
 @api_view(['GET'])
 def file_collection(request, idn):
     files = File.objects.filter(name=idn)
@@ -91,8 +98,8 @@ def file_collection(request, idn):
     return Response(serializer.data)
 
 
-
 def usersfiles(request, idn=None):
+    quote=''
     err = ''
     file_list = File.objects.filter(name=idn)
     ext = {}
@@ -104,7 +111,8 @@ def usersfiles(request, idn=None):
     else:
         ext = []
         err = "No files."
-    return render(request, "userfiles.html", {'user':idn, 'extensions': ext, 'error':err })
+        url, quote = bash.main()
+    return render(request, "userfiles.html", {'user': idn, 'extensions': ext, 'error': err, 'quote': quote})
 
 #
 # @login_required(login_url='/admin/')

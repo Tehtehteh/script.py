@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^(?!admin)new/(?P<idn>[A-z0-9\s-]+)$', views.usersfiles),
     url(r'^api/accept/(?P<idn>[A-z0-9\s]+)$', views.acceptChanges),
     url(r'^$', views.newUsersTable),
+    url(r'api/getquote', views.getBashQuote),
 ]
