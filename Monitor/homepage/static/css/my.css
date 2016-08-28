@@ -91,12 +91,31 @@ div.my-panel {
 .badge-Removed.refresh{
     margin-right: 19px;
 }
-
+.my-row{
+    margin: 20px;
+}
+div.text {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: #f3f3f3;
+    border: 1px dotted #bbbbbb;
+    font-family: 'Monaco', 'Liberation Mono', 'Droid Sans Mono', 'Ubuntu Mono', 'Lucida Console', 'Helvetica Neue', monospace;
+    padding: 7px 8px 5px 8px;
+    font-size: 10pt;
+    line-height: 1.3em;
+}
 
 .badge-New.refresh{
     margin-right: 19px;
 }
-.panel-default p,h1{
+
+.panel-heading p{
+    font-family: 'Ubuntu Condensed', sans-serif;
+    font-size: 1em;
+}
+
+.panel-body p,h1{
     text-align: center;
     font-family: 'Ubuntu Condensed', sans-serif;
     padding-top: 20px;

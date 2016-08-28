@@ -7,6 +7,7 @@
     <link rel="stylesheet" href = "{{ static ('css/my.css')}}" type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://malsup.github.io/jquery.corner.js"></script>
     <script type="text/javascript" src="{{ static('js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ static('js/Usersfile.js') }}"></script>
     <script src="https://use.fontawesome.com/525d12f3f5.js"></script>
@@ -15,17 +16,24 @@
 <body>
     <div class="container container-fluid">
         <div class="panel panel-default">
+                {% if not error|length %}
                 <div class="panel-heading">
                     <button class="btn btn-default" onclick="return location.href='/'">
                         <div class="arrow-left"></div>
                     </button>
                     <span>Статистика файлов <strong> {{user}}</strong></span>
                 </div>
+                {% else %}
+                <div class="panel-heading">
+                    <p> Система мониторинга файлов пользователей.</p>
+                </div>
+                {% endif %}
                 <div class="panel-body">
+                    {% if not error|length %}
                     <div class="row my-row">
                         <div class="col-sm-3">
                             <ul class="list-group">
-                                {% if not error|length %}
+
                               <li class="list-group-item">
                                 Всего файлов
                                   <span style="float: right">
@@ -141,8 +149,15 @@
     </div>
     {% else %}
             <div class="panel panel-default">
-                <h1>У пользователя <strong>{{user}}</strong> нету файлов :(</h1>
-                <p>Возможно, стоит вернуться на <a href="/">главную?</a></p>
+                <div class="panel-body">
+                    <h1>У пользователя <strong>{{user}}</strong> нету файлов :(</h1>
+                    <p>Возможно, стоит вернуться на <a href="/">главную?</a>...<br>Или почитать цитатку? Ы</p>
+                    <div class="row my-row">
+                        <div class="col md-5 center">
+                        {{ quote|regex_replace('(<\/br>)+<', '<br><')|safe }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     {% endif %}
