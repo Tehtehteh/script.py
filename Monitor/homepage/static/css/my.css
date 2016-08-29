@@ -8,6 +8,9 @@ span.badge:hover {
     margin: 0;
     padding: 0;
 }
+p a{
+    cursor: default;
+}
 button.accordion {
     background-color: #eee;
     color: #444;
@@ -78,9 +81,9 @@ div.my-panel {
 }
 
 .refresh {
-    -webkit-animation: spin 1s cubic-bezier(.17,.67,.83,.67) infinite;
-    -moz-animation: spin 1s cubic-bezier(.17,.67,.83,.67) infinite;
-    animation: spin 1s cubic-bezier(.17,.67,.83,.67) infinite;
+    -webkit-animation: spin 1s cubic-bezier(.62,.91,.29,-0.95) infinite;
+    -moz-animation: spin 1s cubic-bezier(.62,.91,.29,-0.95) infinite;
+    animation: spin 1s cubic-bezier(.62,.91,.29,-0.95) infinite;
 }
 
 .badge-Checked.refresh{
