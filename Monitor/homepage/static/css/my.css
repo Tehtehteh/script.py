@@ -81,9 +81,9 @@ div.my-panel {
 }
 
 .refresh {
-    -webkit-animation: spin 1s cubic-bezier(.62,.91,.29,-0.95) infinite;
-    -moz-animation: spin 1s cubic-bezier(.62,.91,.29,-0.95) infinite;
-    animation: spin 1s cubic-bezier(.62,.91,.29,-0.95) infinite;
+    -webkit-animation: spin 1s cubic-bezier(.37,.45,.83,.67) infinite;
+    -moz-animation: spin 1s cubic-bezier(.37,.45,.83,.67) infinite;
+    animation: spin 1s cubic-bezier(.37,.45,.83,.67) infinite;
 }
 
 .badge-Checked.refresh{

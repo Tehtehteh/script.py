@@ -145,13 +145,14 @@
                     </thead>
                 </table>
             </div>
+        <script> var has = true; </script>
     </div>
     {% else %}
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h1>У пользователя <strong>{{user}}</strong> нет файлов :(</h1>
                     <p>Возможно, стоит вернуться на <a href="/">главную?</a>...<br>Или почитать цитатку? <a href="#" onclick="getQuote()">Ы</a>
-                        <em class="fa fa-refresh refresh"></em>
+                        <em style="min-width: 20px;" class="fa fa-refresh refresh"></em>
                     </p>
                     <div class="row my-row">
                         <div class="col md-5 center quote">
@@ -161,6 +162,7 @@
                     </div>
                 </div>
             </div>
+        <script> var has = false;</script>
         </div>
     {% endif %}
     </div>
