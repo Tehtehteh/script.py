@@ -44,20 +44,16 @@ def initEverything(config_name):
     return users, extensions, excludes
 
 
-# ------------- GET LIST OF USERS DIRECTORIES (STR) --------------------#
-
-def initUsers(path):
-    for x in os.walk(path):
-        yield x[1]
-
-
 # ---------------------- RECURSIVE FILE SEARCH (ARGUMENT IS USER DIRECTORY (absolutepath)) -----------__#
 
 def get_filepaths(directory):
     file_paths = []
-    for root, directories, files in os.walk(directory):
-        for filename in files:
-            file_paths.append(os.path.join(root, filename))
+    try:
+        for root, directories, files in os.walk(directory):
+            for filename in files:
+                file_paths.append(os.path.join(root, filename))
+    except Exception as e:
+        print("error encountered", e, "processing directory", directory)
     return file_paths
 
 
@@ -94,8 +90,9 @@ def initDBFromScratch(userlist, extensions, path, db_name):
         try:
             cur.execute("create table Users (name TEXT primary key not null)")
             cur.execute(
-                "create table File (path TEXT primary key not null, old_hash TEXT, new_hash TEXT, flag_exists INTEGER,"
-                "date_checked datetime, accepted INTEGER, name TEXT, foreign key(name) references Users(name) on delete cascade)")
+                'create table File (path TEXT primary key not null, old_hash TEXT, new_hash TEXT, flag_exists INTEGER,'
+                'date_checked datetime, accepted INTEGER, name TEXT, foreign key(name) references Users(name) '
+                'on delete cascade)')
             for user in userlist:
                 cur.execute("insert into Users values (?)", (user,))
                 for file in get_filepaths(os.path.join(path + user)):
@@ -105,7 +102,8 @@ def initDBFromScratch(userlist, extensions, path, db_name):
                                                                                0, user))
         except Exception as e:
             with open("error.log", "a+", encoding="utf-8") as log:
-                log.write(str(e) + " ".join(str(datetime.now().time())) + "\n")
+                log.write('Error encountered while initing DB from scratch: {0}{1}\n'.format(str(e), " ".join(
+                    str(datetime.now().time()))))
         finally:
             con.commit()
 
@@ -116,12 +114,13 @@ def userCreated(user, extensions, cur, path):
     try:
         cur.execute("insert into Users values ('{}')".format(user))
         for file in tqdm(get_filepaths(os.path.join(path + user)), unit='File'):
-            if file not in [x[0] for x in cur.execute("Select * from File").fetchall()] and file.endswith(
+            if file not in [x[0] for x in cur.execute("Select * from File ").fetchall()] and file.endswith(
                     tuple(extensions)):
                 cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                        time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                        0, user))
     except Exception as e:
+        pass
         with open("error.log", "a+", encoding="utf-8") as log:
             log.write(str(e) + " ".join(str(datetime.now().time())) + "\n")
     finally:
@@ -136,36 +135,40 @@ def updateDBCron(userlist, extensions, excludes, path, db_name):
     with lite.connect(db_name) as con:
         cur = con.cursor()
         try:
-            print("Trying to delete users from exclude config:")
-            for exclude in tqdm(excludes, unit='User'):
-                cur.execute("Delete from Users where name=?", (exclude,))
-                cur.execute("Delete from File where name=?", (exclude,))
-                with open("success.log", "a+", encoding="utf-8") as log:
-                    log.write(
-                        "Successfully deleted exclude " + exclude + " in db at " + str(datetime.now().time()) + "\n")
-            print("Trying to fetch users file")
-            for user in tqdm(userlist, unit='File'):
+            if excludes[0]:
+                print("Trying to delete users from exclude config:")
+                for exclude in tqdm(excludes, unit='User'):
+                    cur.execute("Delete from Users where name=?", (exclude,))
+                    cur.execute("Delete from File where name=?", (exclude,))
+                    with open("success.log", "a+", encoding="utf-8") as log:
+                        log.write(
+                            "Successfully deleted exclude " + exclude + " in db at " + str(datetime.now().time()) + "\n")
+            for user in userlist:
                 if user not in [x[0] for x in cur.execute("Select * from Users").fetchall()]:
                     print('Creating new user', user, ' and fetching his files.')
                     userCreated(user, extensions, cur, path)
                 else:
-                    for file in get_filepaths(os.path.join(path + user)):
+                    for file in get_filepaths(os.path.join(path + '/' + user + '/')):
                         if file not in [x[0] for x in
                                         cur.execute("Select * from File where name='{}'".format(user)).fetchall()] \
                                 and file.endswith(tuple(extensions)):
                             cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                                    time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                    0, user))
-                        elif file.endswith(tuple(extensions)) and createHash(file) != cur.execute("Select *"
-                                                                                                  " from file where path='{}'".format(
-                            file)).fetchall()[0][1]:
+                        elif file.endswith(tuple(extensions)) and createHash(file) != cur.execute('Select *'
+                                                                                                 ' from file where \''
+                                                                                                  'path=\'\'{}\''.format(
+                                                                                                file)).fetchall()[0][1]:
                             cur.execute(
                                 "Update file set new_hash='{0}' where path='{1}'".format(createHash(file), file))
                         for N_file in [x[0] for x in
-                                       cur.execute("Select path from file where name=?", (user,)).fetchall()]:
-                            if N_file not in get_filepaths(os.path.join(path + user)):
-                                cur.execute("Update file set flag_exists=? where path=?", (0, N_file))
+                                       cur.execute("Select path from File where name=? and flag_exists=?", (user,1)).fetchall()]:
+                            print("before TTETE")
+                            if N_file not in get_filepaths(os.path.join(path + '/' +  user + '/')):
+                                print("File not found: ", N_file)
+                                cur.execute("Update File set flag_exists=? where path=?", (0, N_file))
         except Exception as e:
+            pass
             with open("error.log", "a+", encoding="utf-8") as log:
                 log.write(str(e) + " " + str(datetime.now().time()) + "\n")
         finally:
@@ -177,18 +180,16 @@ def updateDBCron(userlist, extensions, excludes, path, db_name):
 # ----------------- MAIN FUNC -------------------------------#
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("path", help="Top directory for user's directories to check files in")
-    args = parser.parse_args()
-    path = args.path
+    #parser = argparse.ArgumentParser()
+    #parser.add_argument("path", help="Top directory for user's directories to check files in")
+    #args = parser.parse_args()
+    path = '/home/user6/userstest/'
     init_users = []
     init_extensions = (".php", ".js", ".html", ".css")
     try:
-        init_users.extend(filter(lambda x: not os.path.isfile(x), os.listdir(path)))
-        return
+        init_users.extend(filter(lambda x: not os.path.isfile(x) and not x.endswith('~'), os.listdir(path)))
     except Exception as e:
         print('Error encountered: ', e, file=sys.stderr)
-        return
     config_name = "config.ini"
     db_name = "Monitor/test.db"
     initConfig(path, init_users, init_extensions, config_name)
@@ -197,6 +198,7 @@ def main():
         initDBFromScratch(users, extensions, path, db_name)
     else:
         updateDBCron(users, extensions, excludes, path, db_name)
+
 
 if __name__ == '__main__':
     main()
