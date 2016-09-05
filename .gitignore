@@ -7,3 +7,7 @@ __pycache__
 Added_REST_api_view_.patch
 Monitor/homepage/migrations/0001_initial.py
 Monitor/sqlite3.exe
+Monitor/dumb.sql
+Monitor/test.py
+config.ini
+config.ini~

@@ -95,9 +95,8 @@ def initDBFromScratch(userlist, extensions, path, db_name):
                 'on delete cascade)')
             for user in userlist:
                 cur.execute("insert into Users values (?)", (user,))
-                for file in get_filepaths(os.path.join(path + user)):
-                    if file.endswith(tuple(extensions)):
-                        cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
+                for file in list(filter(lambda x: x.endswith(tuple(extensions)), get_filepaths(os.path.join(path, user)))):
+                    cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                                time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                0, user))
         except Exception as e:
@@ -113,7 +112,7 @@ def initDBFromScratch(userlist, extensions, path, db_name):
 def userCreated(user, extensions, cur, path):
     try:
         cur.execute("insert into Users values ('{}')".format(user))
-        for file in tqdm(get_filepaths(os.path.join(path + user)), unit='File'):
+        for file in tqdm(get_filepaths(os.path.join(path,user)), unit='File'):
             if file not in [x[0] for x in cur.execute("Select * from File ").fetchall()] and file.endswith(
                     tuple(extensions)):
                 cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
@@ -144,29 +143,41 @@ def updateDBCron(userlist, extensions, excludes, path, db_name):
                         log.write(
                             "Successfully deleted exclude " + exclude + " in db at " + str(datetime.now().time()) + "\n")
             for user in userlist:
-                if user not in [x[0] for x in cur.execute("Select * from Users").fetchall()]:
+                print("Here is before user check")
+                if user not in [x[0] for x in cur.execute("Select name from Users").fetchall()] and user not in excludes:
                     print('Creating new user', user, ' and fetching his files.')
                     userCreated(user, extensions, cur, path)
+                    print("Here in user created")
                 else:
-                    for file in get_filepaths(os.path.join(path + '/' + user + '/')):
+                    print("Fetching user and his files ", user)
+                    print(list(filter(lambda x: x.endswith(tuple(extensions)), get_filepaths(os.path.join(path, user + '/')))))
+                    for file in list(filter(lambda x: x.endswith(tuple(extensions)), get_filepaths(os.path.join(path, user + '/')))):
+                        print("First condition : file is new", file, 'and condition is: ', file not in [x[0] for x in
+                                        cur.execute("Select path from File where name='{}'".format(user)).fetchall()] \
+                                and file.endswith(tuple(extensions)))
+                        print("Before cur  new execut")
                         if file not in [x[0] for x in
-                                        cur.execute("Select * from File where name='{}'".format(user)).fetchall()] \
+                                        cur.execute("Select path from File where name='{}'".format(user)).fetchall()] \
                                 and file.endswith(tuple(extensions)):
+                            print("new file!")
+                            print(file)
+                            print("New ???")
                             cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                                    time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                    0, user))
-                        elif file.endswith(tuple(extensions)) and createHash(file) != cur.execute('Select *'
-                                                                                                 ' from file where \''
-                                                                                                  'path=\'\'{}\''.format(
-                                                                                                file)).fetchall()[0][1]:
+                        elif file.endswith(tuple(extensions)) and createHash(file) != cur.execute('Select old_hash'
+                                                                                                 ' from file where '
+                                                                                                  'path=?',(file,)).fetchone()[0]:
+                            print("File changed!!")
                             cur.execute(
                                 "Update file set new_hash='{0}' where path='{1}'".format(createHash(file), file))
-                        for N_file in [x[0] for x in
-                                       cur.execute("Select path from File where name=? and flag_exists=?", (user,1)).fetchall()]:
-                            print("before TTETE")
-                            if N_file not in get_filepaths(os.path.join(path + '/' +  user + '/')):
-                                print("File not found: ", N_file)
-                                cur.execute("Update File set flag_exists=? where path=?", (0, N_file))
+                    print('test')
+                    for N_file in [x[0] for x in
+                                   cur.execute("Select path from File where name=? and flag_exists=?", (user,1)).fetchall()]:
+                        print("before TTETE")
+                        if N_file not in get_filepaths(os.path.join(path, user+'/')):
+                            print("File not found: ", N_file)
+                            cur.execute("Update File set flag_exists=? where path=?", (0, N_file))
         except Exception as e:
             pass
             with open("error.log", "a+", encoding="utf-8") as log:

@@ -10,11 +10,11 @@ from . import bash
 
 
 
-@login_required(login_url='/admin/')
+#@login_required(login_url='/admin/')
 def index(request):
     return render(request, "index.html")
 
-@login_required(login_url='/admin')
+#@login_required(login_url='/admin')
 def newUsersTable(request):
     return render(request, "new_index.html")
 
