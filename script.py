@@ -113,8 +113,7 @@ def userCreated(user, extensions, cur, path):
     try:
         cur.execute("insert into Users values ('{}')".format(user))
         for file in tqdm(get_filepaths(os.path.join(path,user)), unit='File'):
-            if file not in [x[0] for x in cur.execute("Select * from File ").fetchall()] and file.endswith(
-                    tuple(extensions)):
+            if file.endswith(tuple(extensions)) and file not in [x[0] for x in cur.execute("Select * from File ").fetchall()]:
                 cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                        time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                        0, user))
@@ -144,38 +143,26 @@ def updateDBCron(userlist, extensions, excludes, path, db_name):
                             "Successfully deleted exclude " + exclude + " in db at " + str(datetime.now().time()) + "\n")
             for user in userlist:
                 print("Here is before user check")
-                if user not in [x[0] for x in cur.execute("Select name from Users").fetchall()] and user not in excludes:
+                if user not in excludes and user not in [x[0] for x in cur.execute("Select name from Users").fetchall()]:
                     print('Creating new user', user, ' and fetching his files.')
                     userCreated(user, extensions, cur, path)
                     print("Here in user created")
                 else:
-                    print("Fetching user and his files ", user)
-                    print(list(filter(lambda x: x.endswith(tuple(extensions)), get_filepaths(os.path.join(path, user + '/')))))
-                    for file in list(filter(lambda x: x.endswith(tuple(extensions)), get_filepaths(os.path.join(path, user + '/')))):
-                        print("First condition : file is new", file, 'and condition is: ', file not in [x[0] for x in
-                                        cur.execute("Select path from File where name='{}'".format(user)).fetchall()] \
-                                and file.endswith(tuple(extensions)))
-                        print("Before cur  new execut")
-                        if file not in [x[0] for x in
-                                        cur.execute("Select path from File where name='{}'".format(user)).fetchall()] \
-                                and file.endswith(tuple(extensions)):
-                            print("new file!")
-                            print(file)
-                            print("New ???")
+                    files = get_filepaths(os.path.join(path, user))
+                    for file in list(filter(lambda x: x.endswith(tuple(extensions)), files)):
+                        if file.endswith(tuple(extensions)) and file not in [x[0] for x in
+                                        cur.execute("Select path from File where name='{}'".format(user)).fetchall()]:
                             cur.execute("insert into File values(?,?,?,?,?,?,?)", (file, '', createHash(file), 1,
                                                                                    time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                                    0, user))
                         elif file.endswith(tuple(extensions)) and createHash(file) != cur.execute('Select old_hash'
                                                                                                  ' from file where '
                                                                                                   'path=?',(file,)).fetchone()[0]:
-                            print("File changed!!")
                             cur.execute(
                                 "Update file set new_hash='{0}' where path='{1}'".format(createHash(file), file))
-                    print('test')
                     for N_file in [x[0] for x in
                                    cur.execute("Select path from File where name=? and flag_exists=?", (user,1)).fetchall()]:
-                        print("before TTETE")
-                        if N_file not in get_filepaths(os.path.join(path, user+'/')):
+                        if N_file not in files:
                             print("File not found: ", N_file)
                             cur.execute("Update File set flag_exists=? where path=?", (0, N_file))
         except Exception as e:
@@ -191,9 +178,9 @@ def updateDBCron(userlist, extensions, excludes, path, db_name):
 # ----------------- MAIN FUNC -------------------------------#
 
 def main():
-    #parser = argparse.ArgumentParser()
-    #parser.add_argument("path", help="Top directory for user's directories to check files in")
-    #args = parser.parse_args()
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument("path", help="Top directory for user's directories to check files in")
+    # args = parser.parse_args()
     path = '/home/user6/userstest/'
     init_users = []
     init_extensions = (".php", ".js", ".html", ".css")
