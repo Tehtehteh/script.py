@@ -182,6 +182,7 @@ def main():
     # parser.add_argument("path", help="Top directory for user's directories to check files in")
     # args = parser.parse_args()
     path = '/home/user6/userstest/'
+    print('qe')
     init_users = []
     init_extensions = (".php", ".js", ".html", ".css")
     try:
