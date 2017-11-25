@@ -1,8 +1,13 @@
 *.db
 db.*
+*.bakk
 
 __pycache__
 .idea
 Added_REST_api_view_.patch
 Monitor/homepage/migrations/0001_initial.py
 Monitor/sqlite3.exe
+Monitor/dumb.sql
+Monitor/test.py
+config.ini
+config.ini~
