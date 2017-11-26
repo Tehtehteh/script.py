@@ -13,6 +13,9 @@ class FileFlagSerializer(serializers.Serializer):
     flag = serializers.CharField(max_length=10)
     date = serializers.DateTimeField()
 
+class quoteSerializer(serializers.Serializer):
+    url = serializers.CharField(max_length=100)
+    quote =  serializers.CharField(max_length=1000)
 
 class UsersSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
